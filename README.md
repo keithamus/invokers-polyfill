@@ -46,7 +46,7 @@ In the style of `popovertarget`, this document proposes we add `invokertarget`,
 and `invokeraction` as available attributes to `<button>`,
 `<input type="button">` and `<input type="reset">` elements.
 
-The `invoketarget` should be an IDREF pointing to an element within the
+The `invokertarget` should be an IDREF pointing to an element within the
 document. `.invokerTarget` also exists on the element to imperatively assign a
 node to be the invoker target, allowing for cross-root invokers. `invokeraction`
 is a freeform hint to the Invokee. If `invokeraction` is a falsey value (`''`,
