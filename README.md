@@ -51,7 +51,7 @@ document. `.invokerTarget` also exists on the element to imperatively assign a
 node to be the invoker target, allowing for cross-root invokers. `invokeraction`
 is a freeform hint to the Invokee. If `invokeraction` is a falsey value (`''`,
 `null`, etc.) then it will default to `'auto'`. Values which are not recognised
-will be ignored, and should not be assumed to be `auto`. Built-in interactive
+will be ignored by the browser, and should not be assumed to be `auto`. This allows for custom actions. Built-in interactive
 elements have built-in behaviours (detailed below) but also Invokees will
 dispatch events when Invoked, allowing custom code to take control of
 invocations without having to manually wire up DOM nodes for the variety of
