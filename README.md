@@ -20,7 +20,7 @@ behaviour. These patterns reduce developer experience and introduce more
 boilerplate and friction, while remediating security and maintainability
 concerns. Some frameworks attempt to reintroduce the developer experience of
 inline handlers by introducing new JavaScript or HTML shorthands, such as
-React's `onclick={...}`, Vue's `@click=".."` or HTMX's `hx-rigger="click"`.
+React's `onclick={...}`, Vue's `@click=".."` or HTMX's `hx-trigger="click"`.
 
 There has also been a rise in the desire to customise controls for components.
 Many sites, for example, introduce custom controls for File Uploads or dropdown
