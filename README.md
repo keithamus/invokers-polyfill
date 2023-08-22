@@ -121,7 +121,7 @@ video player.
 
 ```html
 <button invokertarget="my-video">Play/Pause</button>
-<button invokertarget="my-video" invokeraction="mute">Play</button>
+<button invokertarget="my-video" invokeraction="mute">Mute</button>
 
 <video id="my-video"></video>
 ```
