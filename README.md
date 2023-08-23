@@ -162,6 +162,10 @@ If an element also has a `popovertarget` attribute then `invokertarget`
 _must_ be ignored. `interesttarget` can exist on the element at the same time
 as `popovertarget`.
 
+If an element is a `button`, and has a `type=submit`, then `invokertarget`
+_must_ be ignored. `interesttarget` can exist on the element at the same time
+as `type=submit`.
+
 ### Example Code
 
 #### Popovers
@@ -416,6 +420,30 @@ non-button elements such as `<div>`s or `<a>`s creates many problems,
 especially for non-interactive elements. While `<a>`s _are_ interactive, they
 should _only_ be used for page navigation and not for invoking other
 behaviours, and so `invokertarget` should not be allowed.
+
+### Why isn't `input[type=submit]` included?
+
+This is not added by design. Submit inputs already have a default action:
+submitting forms. If you want a button to control the submission of a form,
+use `input[type=submit]`, if you want a button to control invocation of
+something _other_ than a form then you should use `input[type=button]`.
+
+### Why _is_ `input[type=reset]` included?
+
+It may stand to reason that if `input[type=submit]` is _excluded_ then so
+should `input[type=reset]`, however, there are valid use cases to resetting
+a form at the same time as some other action, for example closing the
+dialog that contains a form:
+
+```html
+<dialog id="my-dialog">
+  <form>
+    <input type="text">
+    <!-- This button closes the dialog _and_ resets the form -->
+    <input type="reset" invokertarget="my-dialog" value="Cancel">
+  </form>
+</dialog>
+```
 
 ### Why is `interesttarget` less limited?
 
