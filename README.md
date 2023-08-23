@@ -421,14 +421,14 @@ especially for non-interactive elements. While `<a>`s _are_ interactive, they
 should _only_ be used for page navigation and not for invoking other
 behaviours, and so `invokertarget` should not be allowed.
 
-### Why isn't `input[type=submit]` included?
+#### Why isn't `input[type=submit]` included?
 
 This is not added by design. Submit inputs already have a default action:
 submitting forms. If you want a button to control the submission of a form,
 use `input[type=submit]`, if you want a button to control invocation of
 something _other_ than a form then you should use `input[type=button]`.
 
-### Why _is_ `input[type=reset]` included?
+#### Why _is_ `input[type=reset]` included?
 
 It may stand to reason that if `input[type=submit]` is _excluded_ then so
 should `input[type=reset]`, however, there are valid use cases to resetting
@@ -445,7 +445,7 @@ dialog that contains a form:
 </dialog>
 ```
 
-### Why is `interesttarget` less limited?
+#### Why is `interesttarget` less limited?
 
 While _invocation_ should only be limited to buttons, disclosure of
 supplementary information can be expanded to _all_ interactive elements.
@@ -454,7 +454,7 @@ signalling that they are external, or that they will open in a new window, or
 to show preview information (think: preview windows on iOS Safari or the
 hovercards that display on GitHub over a user's handle).
 
-### Why is `interesttarget` not unlimited, like `title` is?
+#### Why is `interesttarget` not unlimited, like `title` is?
 
 It could be considered a mistake to allow `title` on all elements; as adding
 interactivity to non-interactive elements creates many problems. Limiting
