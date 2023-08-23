@@ -465,3 +465,27 @@ developers to use it only on interactive elements, where it makes sense.
 
 Whilst `invokertarget` _does_ replicate `popovertarget`'s functionality, it
 does not necessarily mean `popovertarget` gets removed from the spec.
+
+#### InvokerTarget seems limited, what if I wanted to add arguments?
+
+`invokeraction` is a freeform text hint to your own elements. If you feel
+it necessary you can invent your own DSLs for passing extra data using this
+hint. For example:
+
+```html
+<button invokertarget=my-counter invokeraction="add:1">Add 1</button>
+<button invokertarget=my-counter invokeraction="add:2">Add 2</button>
+<button invokertarget=my-counter invokeraction="add:10">Add 10</button>
+
+<input readonly id="counter" value="0">
+
+<script>
+  const counter = document.getElementById('counter');
+  counter.addEventListener('invoke', e => {
+    let addMatch = /^add:(\d+)$/.match(e.action);
+    if (addMatch) {
+      counter.value = Number(counter.value) + Number(addMatch[1]);
+    }
+  });
+</script>
+```
