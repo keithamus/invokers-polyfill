@@ -477,10 +477,10 @@ hint. For example:
 <button invokertarget=my-counter invokeraction="add:2">Add 2</button>
 <button invokertarget=my-counter invokeraction="add:10">Add 10</button>
 
-<input readonly id="counter" value="0">
+<input readonly id="my-counter" value="0">
 
 <script>
-  const counter = document.getElementById('counter');
+  const counter = document.getElementById('my-counter');
   counter.addEventListener('invoke', e => {
     let addMatch = /^add:(\d+)$/.match(e.action);
     if (addMatch) {
