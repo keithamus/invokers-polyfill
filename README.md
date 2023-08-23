@@ -2,11 +2,21 @@
 
 ## Summary
 
-Adding an `invokertarget` and `invokeraction` to `<button>` elements, and
-`<input type="button">`/`<input type="reset">` elements would allow authors to
-assign behaviour to buttons in a more accessible and declarative way, while
-reducing bugs and simplifying the amount of JavaScript pages are required to
-ship for interactivity.
+Adding `invokertarget` and `invokeraction` attributes to `<button>` and
+`<input type="button">` / `<input type="reset">` elements would allow
+authors to assign behaviour to buttons in a more accessible and
+declarative way, while reducing bugs and simplifying the amount of
+JavaScript pages are required to ship for interactivity. Buttons with
+`invokertarget` will - when clicked, touched, or enacted via keypress -
+dispatch an `InvokeEvent` on the element referenced by `invokertarget`,
+with some default behaviours.
+
+In addition, adding an `interesttarget` attribute to
+`<button>`, `<a>`, `<input>` elements would allow disclosure of high
+fidelity tooltips in a more accessible and declaritive way. Elements
+with `interesttarget` will - when hovered, long pressed, or focussed -
+dispatch an `InterestEvent` on the element referenced by `interesttarget`,
+with some default behaviours.
 
 ## Background
 
@@ -40,22 +50,117 @@ experience for other interactive elements such as `<dialog>`, `<details>`,
 `<video>`, `<input type="file">`, and so on. This proposal attempts to redress
 the balance.
 
+### Terms
+
+- Invoke/Invoked/Invoking: The action of _Invoking_ refers to a complete press action
+  of a button, using a Human Input Device (HID). If the HID is a mouse, this would be
+  a `click` event. If the HID is a touch screen, this would be a press using a
+  stylus or finger. If the HID is a keyboard this would be the `Space` or
+  `Enter` (Carriage Return) key on the keyboard. For other HIDs such as eye
+  tracking or pedals or game controllers, the equivalent expected "click" action
+  should be used to invoke the element.
+- Interest/Shows Interest: The action of _Interest_ refers to the user "landing" on
+  an element without invoking it, using a HID. If the HID is a mouse, this would be a
+  `hover` event. If the HID is a touch screen, this would be a long press on the
+  element using a stylus or finger, if the HID is a keyboard, this would be when the
+  element is focussed. For other HIDs such as eye tracking or pedals or game controllers,
+  the equivalent "focus or hover" action is used to take interest on the element.
+- Loses/Lost Interest: The action of _Loses Interest_ refers to the user "moving away"
+  from an element without invoking it, using a HID. Elements can only _Lose Interest_ if
+  they are in the state of Showing Interest. If the HID is a mouse, this would
+  be a `mouseout` event. If the HID is a touch screen, this would be long pressing
+  outside of the elements bounds. If the HID is a keyboard, this would be moving focus
+  away from the element. For other HIDs such as eye tracking or game controllers, the
+  equivalent  "focusout or mouseout" action is used to _Lose Interest_ on the element.
+- Invoker: An invoker is a button element (that is a `<button>`,
+  `<input type="button>`, or `<input type="reset">`) that has an `invokertarget`
+  attribute set.
+- Invokee: An element which is referenced to by an Invoker, via the
+  `invokertarget` attribute.
+- Interestee: An element which is referenced to by an Interest element, via
+  the `interesttarget` attribute.
+
 ## Proposed Plan
+
 
 In the style of `popovertarget`, this document proposes we add `invokertarget`,
 and `invokeraction` as available attributes to `<button>`,
-`<input type="button">` and `<input type="reset">` elements.
+`<input type="button">` and `<input type="reset">` elements, as well as an
+`interesttarget` attribute to `<button>`, `<a>`, `<input type="button">` and
+`<input type="success">` elements.
 
-The `invokertarget` should be an IDREF pointing to an element within the
-document. `.invokerTarget` also exists on the element to imperatively assign a
-node to be the invoker target, allowing for cross-root invokers. `invokeraction`
-is a freeform hint to the Invokee. If `invokeraction` is a falsey value (`''`,
-`null`, etc.) then it will default to `'auto'`. Values which are not recognised
-will be ignored by the browser, and should not be assumed to be `auto`. This allows for custom actions. Built-in interactive
-elements have built-in behaviours (detailed below) but also Invokees will
-dispatch events when Invoked, allowing custom code to take control of
-invocations without having to manually wire up DOM nodes for the variety of
-invocation patterns.
+```webidl
+interface mixin InvokerElement {
+  [CEReactions] attribute Element? invokerTargetElement;
+  [CEReactions] attribute DOMString invokerAction;
+};
+interface mixing InterestElement {
+  [CEReactions] attribute Element? interestTargetElement;
+}
+```
+
+The `invokertarget` value should be an IDREF pointing to an element within the
+document. `.invokerTargetElement` also exists on the element to imperatively
+assign a node to be the invoker target, allowing for cross-root invokers.
+
+The `invokeraction` (and the `.invokerAction` reflected property) is a freeform
+hint to the Invokee. If `invokeraction` is a falsey value (`''`, `null`, etc.)
+then it will default to `'auto'`. Values which are not recognised should be
+passed verbatim, and should not be assumed to be `auto`. This allows for custom
+actions. Built-in interactive elements have built-in behaviours (detailed below)
+which are determined by the `invokeraction` but also Invokees will dispatch
+events when Invoked, allowing custom code to take control of invocations without
+having to manually wire up DOM nodes for the variety of invocation patterns.
+
+The `interesttarget` value should be an IDREF pointing to an element within the
+document. `.interestTargetElement` also exists on the element to imperatively
+assign a node to be the invoker target, allowing for cross-root invokers.
+
+Elements with `invokertarget` set will dispatch an `InvokeEvent` on the
+_Invokee_ (the element referenced by `invokertarget`) when the element is
+_Invoked_. The `InvokeEvent`'s `type` is always `invoke`. The event also
+contains a `relatedTarget` property that will reference the _Invoker_
+element. `InvokeEvents` are always non-bubbling, cancellable events.
+
+```webidl
+[Exposed=Window]
+interface InvokeEvent : Event {
+  constructor(InvokeEventInit invokeEventInit);
+  readonly attribute Element relatedTarget;
+  readonly attribute DOMString type = "invoke";
+  readonly attribute DOMString action;
+};
+dictionary InvokeEventInit : EventInit {
+  DOMString action = "auto";
+  Element relatedTarget;
+};
+```
+
+Elements with `interesttarget` set will dispatch an `InterestEvent` on
+the _Interestee_ (the element referenced by `interesttarget`) when the element
+_Shows Interest_ or _Loses Interest_. When the element _Shows Interest_ the
+event type will be `'interest'`, when the element _Loses Interest_ the event
+type will be `'loseinterest'`. The event also contains a `relatedTarget`
+property that will reference the _Interest_ element. `InterestEvents` are
+always non-bubbling, cancellable events.
+
+```webidl
+[Exposed=Window]
+interface InterestEvent : Event {
+  constructor(DOMString type, InterestEventInit interestEventInit);
+  readonly attribute Element relatedTarget;
+};
+dictionary InterestEventInit : EventInit {
+  Element relatedTarget;
+};
+```
+
+Both `interesttarget` and `invokertarget` can exist on the same element at
+the same time, and both should be respected.
+
+If an element also has a `popovertarget` attribute then `invokertarget`
+_must_ be ignored. `interesttarget` can exist on the element at the same time
+as `popovertarget`.
 
 ### Example Code
 
@@ -69,6 +174,14 @@ When pointing to a `popover`, `invokertarget` acts like much like
 <!-- Effectively the same as popovertarget="my-popover" -->
 
 <div id="my-popover" popover="auto">Hello world</div>
+```
+
+An `interesttarget` allows for tooltips using `popover`:
+
+```html
+<button interesttarget="my-popover">Open Popover</button>
+
+<div id="my-popover" popover="hint">Hello world</div>
 ```
 
 #### Dialogs
@@ -88,7 +201,7 @@ openness.
 
 #### Details
 
-When pointing to a `<details>`, `invokertarget` can toggle a `<details>`'s
+When pointing to a `<details>`, `invokertarget` can toggle a `<details>`'
 openness.
 
 ```html
@@ -149,15 +262,27 @@ the Invokers.
 </script>
 ```
 
-### Terms
+Elements with _Interest_ will dispatch events on the _Interestee_ element,
+allowing for custom JavaScript to be triggered without having to wire up manual
+event handlers to the Interest elements.
 
-- Invoker: An invoker is a button element (that is a `<button>`,
-  `<input type="button>`, or `<input type="reset">`) that has an `invokertarget`
-  attribute set.
-- Invokee: An element which is referenced to by an Invoker, via the
-  `invokertarget` attribute.
-- Invoked: An Invoker can be interacted with via Click, Touch, or keyboard press
-  (among other input methods). This causes the _Invoker_ to be _Invoked_.
+```html
+<button interesttarget="my-custom">
+  When this button shows interest, the below div will display.
+</button>
+
+<div id="my-custom" hidden>Supplementary information</div>
+
+<script>
+  const custom = document.getElementById("my-custom");
+  custom.addEventListener("interest", (e) => {
+    custom.hidden = false
+  });
+  custom.addEventListener("loseinterest", (e) => {
+    custom.hidden = true
+  });
+</script>
+```
 
 ### Accessibility
 
@@ -179,16 +304,7 @@ an`aria-haspopup=dialog`, and an`aria-expanded=`attribute which will match the
 sate of the _Invokee_'s openness. It will be`aria-expanded=true`when the
 _Invokee_ is open and`aria-expanded=false` otherwise.
 
-### Interaction
-
-When the _Invoker_ is _Invoked_ it will dispatch a `new InvokeEvent()` on the
-_Invokee_. The `InvokeEvent` has the following properties:
-
-- `relatedTarget` - this points to the _Invoker_ element.
-- `action` - this is the value of the `invokeraction=` attribute, or `'auto'` if
-  the `invokeraction=` attribute is falsey.
-
-`InvokeEvent` does not bubble, but it is cancellable.
+TBD: Accessibility attributes for `interesttarget`.
 
 ### Defaults
 
@@ -196,7 +312,7 @@ The `InvokeEvent` has a default behaviour depending on the element. Non-trusted
 events are ignored, but can be useful for implementers. Trusted events do the
 following. Note that this list is ordered and higher rules take precedence:
 
-| Invokee Type          | `action` hint    | Behaviour                                                                           |
+| Invokee Element       | `action` hint    | Behaviour                                                                           |
 | :-------------------- | :--------------- | :---------------------------------------------------------------------------------- |
 | `<* popover>`         | `'auto'`         | Call `.togglePopover()` on the invokee                                              |
 | `<* popover>`         | `'hidePopover'`  | Call `.hidePopover()` on the invokee                                                |
@@ -218,13 +334,29 @@ following. Note that this list is ordered and higher rules take precedence:
 | `<audio>`             | `'muteAudio'`    | Toggle the `.muted` value                                                           |
 | `<canvas>`            | `'clearCanvas'`  | Remove all image data on the canvas (effectively (.clearRect(0, 0, width, height)`) |
 
-### Invokers Role in Custom Elements
+The `InterestEvent` has a default behaviour depending on the element. Non-trusted
+events are ignored, but can be useful for implementers. Trusted events do the
+following. Note that this list is ordered and higher rules take precedence:
 
-As the `Invoker` dispatches an `InvokeEvent()` on the Invokee element, Custom
-Elements can make use of this behaviour. Consider the following:
+| Interestee Element    | Event Type       | Behaviour                                                                           |
+| :-------------------- | :--------------- | :---------------------------------------------------------------------------------- |
+| `<* popover=hint>`    | `'interest'`     | Call `.showPopover()` on the invokee                                                |
+| `<* popover=hint>`    | `'loseinterest'` | Call `.hidePopover()` on the invokee                                                |
+
+
+### Invoke/Interest and Custom Elements
+
+As the underlying system for invoke/interest elements uses event dispatch,
+Custom Elements can make use of `InvokeEvent`/`InterestEvent`s for their own
+behaviours. Consider the following:
 
 ```html
-<button invokertarget="my-element" invokeraction="spin">Spin the widget</button>
+<button
+  interesttarget="my-element"
+  invokertarget="my-element" invokeraction="spin"
+>
+  Spin the widget
+</button>
 
 <spin-widget id="my-element"></spin-widget>
 <script>
@@ -237,6 +369,12 @@ Elements can make use of this behaviour. Consider the following:
             this.spin();
           }
         });
+        this.addEventListener("interest", (e) => {
+          this.style.transform = 'rotate(1deg)'
+        });
+        this.addEventListener("interest", (e) => {
+          this.style.transform = 'rotate(0)'
+        });
       }
     },
   );
@@ -244,6 +382,22 @@ Elements can make use of this behaviour. Consider the following:
 ```
 
 ### PAQ (Potentially Asked Questions)
+
+#### Why the name `invoker`? Why not `click`?
+
+While `click` is a fairly well established name in the world of the web, it is
+quite specific to certain types of HID and is not a term which encompasses all
+viable methods of interaction. In addition a `clickaction` attribute is deemed 
+to be a little too ambiguous as it conflates existing concepts. Given the
+opportunity to supply a new name, `invoke` was settled on.
+
+#### Why the name `invoker`? Why not `hover` or `focus`?
+
+Much like `click`, `hover` or `focus` are specific to certain types of HID, and
+are not terms which encompass all viable methods of interaction. Lots of
+[alternatives were discussed](https://github.com/openui/open-ui/issues/767) and
+it was deemed that `interest` is the best name to explain the concept of a
+"hover or focus or equivalent".
 
 #### What about adding defaults for `<form>`?
 
@@ -255,7 +409,31 @@ replace Reset or Submit buttons. If you want to control forms, use those.
 Defaults for `<a>` are intentionally omitted as this proposal does not aim to
 replace anchors. If you intend to produce a page navigation, use an `<a>` tag.
 
+### Why is `invokertarget` limited to buttons?
+
+This is by design, to allow for a "pit of success"; invoking actions on
+non-button elements such as `<div>`s or `<a>`s creates many problems, 
+especially for non-interactive elements. While `<a>`s _are_ interactive, they
+should _only_ be used for page navigation and not for invoking other
+behaviours, and so `invokertarget` should not be allowed.
+
+### Why is `interesttarget` less limited?
+
+While _invocation_ should only be limited to buttons, disclosure of
+supplementary information can be expanded to _all_ interactive elements.
+There are many useful use cases for offering a tooltip on anchors, such as
+signalling that they are external, or that they will open in a new window, or
+to show preview information (think: preview windows on iOS Safari or the
+hovercards that display on GitHub over a user's handle).
+
+### Why is `interesttarget` not unlimited, like `title` is?
+
+It could be considered a mistake to allow `title` on all elements; as adding
+interactivity to non-interactive elements creates many problems. Limiting
+where `interesttarget` is allowed aims to create a "pit of success", guiding
+developers to use it only on interactive elements, where it makes sense.
+
 #### What does this mean for `popovertarget`?
 
-Whilst this _does_ replicate `popovertarget`'s functionality, it does not
-necessarily mean `popovertarget` gets removed from the spec.
+Whilst `invokertarget` _does_ replicate `popovertarget`'s functionality, it
+does not necessarily mean `popovertarget` gets removed from the spec.
