@@ -25,7 +25,7 @@ long while ago this took the form of adding inline JavaScript to an event
 attribute, such as `<button onclick="other.open()"></button>`. Inline JavaScript
 has (rightly so) fallen out of favour due to the security and maintainability
 concerns. Newer pages may instead introduce _more_ JavaScript to imperatively
-discover elements and call `addEventListner('click', ...)` to invoke the same
+discover elements and call `addEventListener('click', ...)` to invoke the same
 behaviour. These patterns reduce developer experience and introduce more
 boilerplate and friction, while remediating security and maintainability
 concerns. Some frameworks attempt to reintroduce the developer experience of
