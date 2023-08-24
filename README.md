@@ -86,8 +86,7 @@ the balance.
 In the style of `popovertarget`, this document proposes we add `invokertarget`,
 and `invokeraction` as available attributes to `<button>`,
 `<input type="button">` and `<input type="reset">` elements, as well as an
-`interesttarget` attribute to `<button>`, `<a>`, `<input type="button">` and
-`<input type="success">` elements.
+`interesttarget` attribute to `<button>`, `<a>`, and `<input>` elements.
 
 ```webidl
 interface mixin InvokerElement {
