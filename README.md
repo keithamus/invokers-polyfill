@@ -66,7 +66,8 @@ the balance.
   element is focussed. For other HIDs such as eye tracking or pedals or game controllers,
   the equivalent "focus or hover" action is used to take interest on the element.
 - Loses/Lost Interest: The action of _Loses Interest_ refers to the user "moving away"
-  from an element without invoking it, using a HID. Elements can only _Lose Interest_ if
+  from an element, or its _interstee_, using a HID; in other words interest must be on
+  a different element that is neither. Elements can only _Lose Interest_ if
   they are in the state of Showing Interest. If the HID is a mouse, this would
   be a `mouseout` event. If the HID is a touch screen, this would be long pressing
   outside of the elements bounds. If the HID is a keyboard, this would be moving focus
@@ -142,10 +143,12 @@ dictionary InvokeEventInit : EventInit {
 Elements with `interesttarget` set will dispatch an `InterestEvent` on
 the _Interestee_ (the element referenced by `interesttarget`) when the element
 _Shows Interest_ or _Loses Interest_. When the element _Shows Interest_ the
-event type will be `'interest'`, when the element _Loses Interest_ the event
-type will be `'loseinterest'`. The event also contains a `relatedTarget`
-property that will reference the _Interest_ element. `InterestEvents` are
-always non-bubbling, cancellable events.
+event type will be `'interest'`. If the element has _Shown Interest_, and
+interest moves away from both the _Interest Element_ and the _Interestee_,
+then the element _Loses Interest_ and an `InterestEvent` with the type of
+`'loseinterest'` will be dispatched on the _Interestee_. The event also
+contains a `relatedTarget` property that will reference the _Interest_
+element. `InterestEvents` are always non-bubbling, cancellable events.
 
 ```webidl
 [Exposed=Window]
