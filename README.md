@@ -100,7 +100,9 @@ interface mixing InterestElement {
 
 The `invokertarget` value should be an IDREF pointing to an element within the
 document. `.invokerTargetElement` also exists on the element to imperatively
-assign a node to be the invoker target, allowing for cross-root invokers.
+assign a node to be the invoker target, allowing for cross-root invokers (in
+some cases, see [the popovertarget attr-asociated element steps for
+more](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element).
 
 The `invokeraction` (and the `.invokerAction` reflected property) is a freeform
 hint to the Invokee. If `invokeraction` is a falsey value (`''`, `null`, etc.)
@@ -113,7 +115,9 @@ having to manually wire up DOM nodes for the variety of invocation patterns.
 
 The `interesttarget` value should be an IDREF pointing to an element within the
 document. `.interestTargetElement` also exists on the element to imperatively
-assign a node to be the invoker target, allowing for cross-root invokers.
+assign a node to be the invoker target, allowing for cross-root invokers (in
+some cases, see [the popovertarget attr-asociated element steps for
+more](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element).
 
 Elements with `invokertarget` set will dispatch an `InvokeEvent` on the
 _Invokee_ (the element referenced by `invokertarget`) when the element is
