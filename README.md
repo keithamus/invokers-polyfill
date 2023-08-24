@@ -347,7 +347,10 @@ following. Note that this list is ordered and higher rules take precedence:
 | `<audio>`             | `'pauseAudio'`   | If `.playing` is `true`, set it tto `false`                                         |
 | `<audio>`             | `'playAudio'`    | If `.playing` is `false`, set it tto `true`                                         |
 | `<audio>`             | `'muteAudio'`    | Toggle the `.muted` value                                                           |
-| `<canvas>`            | `'clearCanvas'`  | Remove all image data on the canvas (effectively (.clearRect(0, 0, width, height)`) |
+| `<canvas>`            | `'clearCanvas'`  | Remove all image data on the canvas (effectively (`.clearRect(0, 0, width, height)`)|
+
+> [!NOTE]
+> The above table is an attempt at wide coverage, but ideas are welcome. Please submit a PR if you have one!
 
 The `InterestEvent` has a default behaviour depending on the element. Non-trusted
 events are ignored, but can be useful for implementers. Trusted events do the
@@ -358,6 +361,8 @@ following. Note that this list is ordered and higher rules take precedence:
 | `<* popover=hint>`    | `'interest'`     | Call `.showPopover()` on the invokee                                                |
 | `<* popover=hint>`    | `'loseinterest'` | Call `.hidePopover()` on the invokee                                                |
 
+> [!NOTE]
+> The above table is an attempt at wide coverage, but ideas are welcome. Please submit a PR if you have one!
 
 ### Invoke/Interest and Custom Elements
 
