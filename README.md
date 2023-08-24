@@ -157,13 +157,18 @@ dictionary InterestEventInit : EventInit {
 Both `interesttarget` and `invokertarget` can exist on the same element at
 the same time, and both should be respected.
 
-If an element also has a `popovertarget` attribute then `invokertarget`
-_must_ be ignored. `interesttarget` can exist on the element at the same time
-as `popovertarget`.
+If an element also has both a `popovertarget` and `invokertarget` attribute,
+then `popovertarget` _must_ be ignored: `invokertarget` takes precedence.
+An element with both `interesttarget` and `popovertarget` is valid and both
+actions will work.
 
-If an element is a `button`, and has a `type=submit`, then `invokertarget`
-_must_ be ignored. `interesttarget` can exist on the element at the same time
-as `type=submit`.
+If an `<button>` is a form participant, or has `type=submit`, then
+`invokertarget` _must_ be ignored. `interesttarget` is still valid in these
+scenarios.
+
+If an `<input>` is a form participant, or has a `type` other than `reset` or
+`button`, then `invokertarget` _must_ be ignored. `interesttarget` is still
+valid in these scenarios.
 
 ### Example Code
 
