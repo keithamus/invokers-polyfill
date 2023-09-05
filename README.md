@@ -304,23 +304,24 @@ event handlers to the Interest elements.
 > [!WARNING]  
 > This section is incomplete PRs welcome.
 
-The _Invoker_ implicitly receives `aria-controls=IDREF` to announce to Assistive
-Technologies that this _Invoker_ controls another element (the _Invokee_).
+The _Invoker_ implicitly receives `aria-controls=IDREF` or `aria-details=IDREF` (tbd)
+to expose the _Invoker_ controls another element (the _Invokee_) for instances
+where the invokee is not a sibling to the invoker element.
 
 If the _Invokee_ has the `popover` attribute, the _Invoker_ implicitly receives
-an `aria-expanded=` attribute which will match the sate of the popovers
+an `aria-expanded` state, as well as an `aria-details` association (for instances where
+the elements are not DOM siblings) which will match the state of the popover's
 openness. It will be `aria-expanded=true` when the `popover` is `:popover-open`
 and `aria-expanded=false` otherwise.
 
 If the _Invokee_ is a `<details>` element the _Invoker_ implicitly receives
-an`aria-expanded=`attribute which will match the sate of the _Invokee_'s
-openness. It will be`aria-expanded=true`when the _Invokee_ is open
-and`aria-expanded=false` otherwise.
+an `aria-expanded` state which will match the state of the _Invokee_'s
+openness. It will be `aria-expanded=true` when the _Invokee_ is open
+and `aria-expanded=false` otherwise.
 
 If the _Invokee_ is a `<dialog>` element the _Invoker_ implicitly receives
-an`aria-haspopup=dialog`, and an`aria-expanded=`attribute which will match the
-sate of the _Invokee_'s openness. It will be`aria-expanded=true`when the
-_Invokee_ is open and`aria-expanded=false` otherwise.
+an `aria-expanded` state which will match the state of the _Invokee_'s openness. 
+It will be `aria-expanded=true` when the _Invokee_ is open and `aria-expanded=false` otherwise.
 
 TBD: Accessibility attributes for `interesttarget`.
 
@@ -343,12 +344,12 @@ following. Note that this list is ordered and higher rules take precedence:
 | `<details>`           | `'closeDetails'` | If the `<details>` is `open`, then close it                                         |
 | `<input type="file">` | `'auto'`         | Open the OS file picker, in other words act as if the input itself had been clicked |
 | `<video>`             | `'auto'`         | Toggle the `.playing` value                                                         |
-| `<video>`             | `'pauseVideo'`   | If `.playing` is `true`, set it tto `false`                                         |
-| `<video>`             | `'playVideo'`    | If `.playing` is `false`, set it tto `true`                                         |
+| `<video>`             | `'pauseVideo'`   | If `.playing` is `true`, set it to `false`                                         |
+| `<video>`             | `'playVideo'`    | If `.playing` is `false`, set it to `true`                                         |
 | `<video>`             | `'muteVideo'`    | Toggle the `.muted` value                                                           |
 | `<audio>`             | `'auto'`         | Toggle the `.playing` value                                                         |
-| `<audio>`             | `'pauseAudio'`   | If `.playing` is `true`, set it tto `false`                                         |
-| `<audio>`             | `'playAudio'`    | If `.playing` is `false`, set it tto `true`                                         |
+| `<audio>`             | `'pauseAudio'`   | If `.playing` is `true`, set it to `false`                                         |
+| `<audio>`             | `'playAudio'`    | If `.playing` is `false`, set it to `true`                                         |
 | `<audio>`             | `'muteAudio'`    | Toggle the `.muted` value                                                           |
 | `<canvas>`            | `'clearCanvas'`  | Remove all image data on the canvas (effectively (`.clearRect(0, 0, width, height)`)|
 
