@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <script type="module">
+    import { isSupported, apply } from "./invoker.js";
+    if (!isSupported()) apply();
+  </script>
+  <body>
+    <h1>InvokerTarget &amp; InvokerAction</h1>
+    <p>
+      This is a demonstration page of the explainer found at
+      <a href="https://github.com/keithamus/invoker-buttons-proposal"
+        >github:keithamus/invoker-buttons-proposal</a
+      >.
+    </p>
+    <p>
+      This page is running a "polyfill" for the spec, but hopefully in the
+      future all of the below will work without any JavaScript!
+    </p>
+    <hr />
+
+    <button invokertarget="my-details" interesttarget="button-explainer">
+      This will open the details
+    </button>
+
+    <details id="my-details">
+      <summary interesttarget="details-explainer">This is a details</summary>
+      This is the details
+    </details>
+
+    <div popover id="button-explainer">
+      This button will open the details element
+    </div>
+    <div popover id="details-explainer">
+      This button also opens the details element
+    </div>
+
+    <hr />
+
+    <button invokertarget="my-dialog" interesttarget="dialog-explainer">
+      This will open the dialog
+    </button>
+
+    <dialog id="my-dialog">
+      <button invokertarget="my-dialog">x</button>
+      This is a dialog. Click the X to close it
+    </dialog>
+
+    <div popover id="dialogh-explainer">
+      This button will open the dialog element
+    </div>
+
+    <hr />
+    <button invokertarget="my-video">Play/pause</button>
+    <button invokertarget="my-video" invokeraction="play">Play</button>
+    <button invokertarget="my-video" invokeraction="pause">Pause</button>
+    <button invokertarget="my-video" invokeraction="mute">Mute</button>
+    <button invokertarget="my-video" invokeraction="fullscreen">
+      Fullscreen
+    </button>
+    <video id="my-video" width="720">
+      <source
+        src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </body>
+</html>
