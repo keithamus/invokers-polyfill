@@ -401,7 +401,7 @@ behaviours. Consider the following:
         this.addEventListener("interest", (e) => {
           this.style.transform = "rotate(1deg)";
         });
-        this.addEventListener("interest", (e) => {
+        this.addEventListener("loseinterest", (e) => {
           this.style.transform = "rotate(0)";
         });
       }
@@ -420,7 +420,7 @@ viable methods of interaction. In addition a `clickaction` attribute is deemed
 to be a little too ambiguous as it conflates existing concepts. Given the
 opportunity to supply a new name, `invoke` was settled on.
 
-#### Why the name `invoker`? Why not `hover` or `focus`?
+#### Why the name `interest`? Why not `hover` or `focus`?
 
 Much like `click`, `hover` or `focus` are specific to certain types of HID, and
 are not terms which encompass all viable methods of interaction. Lots of
