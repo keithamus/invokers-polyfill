@@ -211,6 +211,13 @@ function handleDefaultInvoke(invoker) {
   if (event.defaultPrevented) return;
 
   switch (invokee.localName) {
+    case "input": {
+      if (["auto", "showpicker"].includes(event.action)) {
+        event.target.showPicker();
+      }
+      break;
+    }
+
     case "details": {
       switch (event.action) {
         case "auto": {
