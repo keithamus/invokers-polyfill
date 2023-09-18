@@ -74,7 +74,7 @@ the balance.
   such as eye tracking or game controllers, the equivalent "focusout or
   mouseout" action is used to _Lose Interest_ on the element.
 - Invoker: An invoker is a button element (that is a `<button>`,
-  `<input type="button>`, or `<input type="reset">`) that has an `invokertarget`
+  `<input type="button">`, or `<input type="reset">`) that has an `invokertarget`
   attribute set.
 - Invokee: An element which is referenced to by an Invoker, via the
   `invokertarget` attribute.
@@ -102,8 +102,8 @@ The `invokertarget` value should be an IDREF pointing to an element within the
 document. `.invokerTargetElement` also exists on the element to imperatively
 assign a node to be the invoker target, allowing for cross-root invokers (in
 some cases, see
-[the popovertarget attr-asociated element steps for
-more](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element).
+[the popovertarget attr-asociated element steps](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element) for
+more).
 
 The `invokeraction` (and the `.invokerAction` reflected property) is a freeform
 hint to the Invokee. If `invokeraction` is a falsey value (`''`, `null`, etc.)
@@ -118,8 +118,8 @@ The `interesttarget` value should be an IDREF pointing to an element within the
 document. `.interestTargetElement` also exists on the element to imperatively
 assign a node to be the invoker target, allowing for cross-root invokers (in
 some cases, see
-[the popovertarget attr-asociated element steps for
-more](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element).
+[the popovertarget attr-asociated element steps](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element) for
+more).
 
 Elements with `invokertarget` set will dispatch an `InvokeEvent` on the
 _Invokee_ (the element referenced by `invokertarget`) when the element is
@@ -170,7 +170,7 @@ then `popovertarget` _must_ be ignored: `invokertarget` takes precedence. An
 element with both `interesttarget` and `popovertarget` is valid and both actions
 will work.
 
-If an `<button>` is a form participant, or has `type=submit`, then
+If a `<button>` is a form participant, or has `type=submit`, then
 `invokertarget` _must_ be ignored. `interesttarget` is still valid in these
 scenarios.
 
@@ -232,7 +232,7 @@ openness.
 
 #### Customizing `input type=file`
 
-Pointing an `invokertarget` to an `<input type=file>` acts the same as the
+Pointing an `invokertarget` to an `<input type="file">` acts the same as the
 rendered button _within_ the input; and can be used to declare a customised
 alternative button to the input's button.
 
