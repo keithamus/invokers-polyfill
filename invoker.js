@@ -212,7 +212,7 @@ function handleDefaultInvoke(invoker) {
 
   switch (invokee.localName) {
     case "input": {
-      if (["auto", "showpicker"].includes(event.action)) {
+      if (event.action === "auto" || event.action === "showpicker") {
         event.target.showPicker();
       }
       break;
