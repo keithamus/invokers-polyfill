@@ -343,7 +343,7 @@ table represents how invocations on specific element types are handled. Note
 that this list is ordered and higher rules take precedence:
 
 | Invokee Element       | `action` hint   | Behaviour                                                                            |
-| :-------------------- | :-------------- | :----------------------------------------------------------------------------------- |
+|:----------------------| :-------------- |:-------------------------------------------------------------------------------------|
 | `<* popover>`         | `'auto'`        | Call `.togglePopover()` on the invokee                                               |
 | `<* popover>`         | `'hidePopover'` | Call `.hidePopover()` on the invokee                                                 |
 | `<* popover>`         | `'showPopover'` | Call `.showPopover()` on the invokee                                                 |
@@ -353,7 +353,7 @@ that this list is ordered and higher rules take precedence:
 | `<details>`           | `'auto'`        | If the `<details>` is `open`, then close it, otherwise open it                       |
 | `<details>`           | `'open'`        | If the `<details>` is not `open`, then open it                                       |
 | `<details>`           | `'close'`       | If the `<details>` is `open`, then close it                                          |
-| `<input type="file">` | `'auto'`        | Open the OS file picker, in other words act as if the input itself had been clicked  |
+| `<input>`             | `'auto'`        | Call `.showPicker()` on the invokee                                                  |
 | `<video>`             | `'auto'`        | Toggle the `.playing` value                                                          |
 | `<video>`             | `'pause'`       | If `.playing` is `true`, set it to `false`                                           |
 | `<video>`             | `'play'`        | If `.playing` is `false`, set it to `true`                                           |
