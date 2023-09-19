@@ -336,9 +336,11 @@ TBD: Accessibility attributes for `interesttarget`.
 
 ### Defaults
 
-The `InvokeEvent` has a default behaviour depending on the element. Non-trusted
-events are ignored, but can be useful for implementers. Trusted events do the
-following. Note that this list is ordered and higher rules take precedence:
+Depending on the target set by `invokertarget`, invoking the button will trigger
+additional behaviours alongside the event dispatch. Invoking an invokertarget
+will _always_ dispatch a trusted `InvokeEvent`, but in addition the following
+table represents how invocations on specific element types are handled. Note
+that this list is ordered and higher rules take precedence:
 
 | Invokee Element       | `action` hint   | Behaviour                                                                            |
 | :-------------------- | :-------------- | :----------------------------------------------------------------------------------- |
@@ -366,10 +368,12 @@ following. Note that this list is ordered and higher rules take precedence:
 > [!NOTE] The above table is an attempt at wide coverage, but ideas are welcome.
 > Please submit a PR if you have one!
 
-The `InterestEvent` has a default behaviour depending on the element.
-Non-trusted events are ignored, but can be useful for implementers. Trusted
-events do the following. Note that this list is ordered and higher rules take
-precedence:
+Depending on the target set by `interesttarget`, showing interest or losing
+interest can trigger additional behaviours alongside the event dispatch.
+Showing/losing interest on an interesttarget will _always_ dispatch a trusted
+`InterestEvent`, but in addition the following table represents how interest on
+specific element types are handled. Note that this list is ordered and higher
+rules take precedence:
 
 | Interestee Element | Event Type       | Behaviour                            |
 | :----------------- | :--------------- | :----------------------------------- |
@@ -435,12 +439,12 @@ are not terms which encompass all viable methods of interaction. Lots of
 it was deemed that `interest` is the best name to explain the concept of a
 "hover or focus or equivalent".
 
-#### What about adding defaults for `<form>`?
+#### What about adding Invoker defaults for `<form>`?
 
 Defaults for `<form>` are intentionally omitted as this proposal does not aim to
 replace Reset or Submit buttons. If you want to control forms, use those.
 
-#### What about adding defaults for `<a>`?
+#### What about adding Invoker defaults for `<a>`?
 
 Defaults for `<a>` are intentionally omitted as this proposal does not aim to
 replace anchors. If you intend to produce a page navigation, use an `<a>` tag.
