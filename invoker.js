@@ -210,6 +210,21 @@ function handleDefaultInvoke(invoker) {
   invokee.dispatchEvent(event);
   if (event.defaultPrevented) return;
 
+  if (event.action === "requestfullscreen") {
+    event.target.requestFullscreen();
+    return;
+  } else if (event.action === "exitfullscreen") {
+    document.exitFullscreen();
+    return;
+  } else if (event.action === "togglefullscreen") {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      event.target.requestFullscreen();
+    }
+    return;
+  }
+
   switch (invokee.localName) {
     case "input": {
       if (event.action === "auto" || event.action === "showpicker") {
@@ -295,10 +310,6 @@ function handleDefaultInvoke(invoker) {
             lastVolumes.set(event.target, event.target.volume);
             event.target.volume = 0;
           }
-          break;
-        }
-        case "fullscreen": {
-          event.target.requestFullscreen();
           break;
         }
       }

@@ -342,29 +342,31 @@ will _always_ dispatch a trusted `InvokeEvent`, but in addition the following
 table represents how invocations on specific element types are handled. Note
 that this list is ordered and higher rules take precedence:
 
-| Invokee Element       | `action` hint   | Behaviour                                                                            |
-|:----------------------| :-------------- |:-------------------------------------------------------------------------------------|
-| `<* popover>`         | `'auto'`        | Call `.togglePopover()` on the invokee                                               |
-| `<* popover>`         | `'hidePopover'` | Call `.hidePopover()` on the invokee                                                 |
-| `<* popover>`         | `'showPopover'` | Call `.showPopover()` on the invokee                                                 |
-| `<dialog>`            | `'auto'`        | If the `<dialog>` is not `open`, call `showModal()`, otherwise cancel the dialog     |
-| `<dialog>`            | `'showModal'`   | If the `<dialog>` is not `open`, call `showModal()`                                  |
-| `<dialog>`            | `'close'`       | If the `<dialog>` is `open`, cancel the dialog                                       |
-| `<details>`           | `'auto'`        | If the `<details>` is `open`, then close it, otherwise open it                       |
-| `<details>`           | `'open'`        | If the `<details>` is not `open`, then open it                                       |
-| `<details>`           | `'close'`       | If the `<details>` is `open`, then close it                                          |
-| `<select>`            | `'auto'`        | Open the `<select>` option picker UI                                                 |
-| `<input>`             | `'auto'`        | Call `.showPicker()` on the invokee                                                  |
-| `<video>`             | `'auto'`        | Toggle the `.playing` value                                                          |
-| `<video>`             | `'pause'`       | If `.playing` is `true`, set it to `false`                                           |
-| `<video>`             | `'play'`        | If `.playing` is `false`, set it to `true`                                           |
-| `<video>`             | `'mute'`        | Toggle the `.muted` value                                                            |
-| `<video>`             | `'fullscreen'`  | Request the element to enter into 'fullscreen' mode                                  |
-| `<audio>`             | `'auto'`        | Toggle the `.playing` value                                                          |
-| `<audio>`             | `'pause'`       | If `.playing` is `true`, set it to `false`                                           |
-| `<audio>`             | `'play'`        | If `.playing` is `false`, set it to `true`                                           |
-| `<audio>`             | `'mute'`        | Toggle the `.muted` value                                                            |
-| `<canvas>`            | `'clear'`       | Remove all image data on the canvas (effectively (`.clearRect(0, 0, width, height)`) |
+| Invokee Element       | `action` hint         | Behaviour                                                                            |
+|:----------------------|:----------------------|:-------------------------------------------------------------------------------------|
+| `<* popover>`         | `'auto'`              | Call `.togglePopover()` on the invokee                                               |
+| `<* popover>`         | `'hidePopover'`       | Call `.hidePopover()` on the invokee                                                 |
+| `<* popover>`         | `'showPopover'`       | Call `.showPopover()` on the invokee                                                 |
+| `<dialog>`            | `'auto'`              | If the `<dialog>` is not `open`, call `showModal()`, otherwise cancel the dialog     |
+| `<dialog>`            | `'showModal'`         | If the `<dialog>` is not `open`, call `showModal()`                                  |
+| `<dialog>`            | `'close'`             | If the `<dialog>` is `open`, cancel the dialog                                       |
+| `<details>`           | `'auto'`              | If the `<details>` is `open`, then close it, otherwise open it                       |
+| `<details>`           | `'open'`              | If the `<details>` is not `open`, then open it                                       |
+| `<details>`           | `'close'`             | If the `<details>` is `open`, then close it                                          |
+| `<select>`            | `'auto'`              | Open the `<select>` option picker UI                                                 |
+| `<input>`             | `'auto'`              | Call `.showPicker()` on the invokee                                                  |
+| `<video>`             | `'auto'`              | Toggle the `.playing` value                                                          |
+| `<video>`             | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
+| `<video>`             | `'play'`              | If `.playing` is `false`, set it to `true`                                           |
+| `<video>`             | `'mute'`              | Toggle the `.muted` value                                                            |
+| `<audio>`             | `'auto'`              | Toggle the `.playing` value                                                          |
+| `<audio>`             | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
+| `<audio>`             | `'play'`              | If `.playing` is `false`, set it to `true`                                           |
+| `<audio>`             | `'mute'`              | Toggle the `.muted` value                                                            |
+| `<canvas>`            | `'clear'`             | Remove all image data on the canvas (effectively (`.clearRect(0, 0, width, height)`) |
+| `<*>`                 | `'toggleFullscreen'`  | If the element is fullscreen, then exit, otherwise request to enter                  |
+| `<*>`                 | `'requestFullscreen'` | Request the element to enter into 'fullscreen' mode                                  |
+| `<*>`                 | `'exitFullscreen'`    | Request the element to exit 'fullscreen' mode                                        |
 
 > [!NOTE]
 > The above table is an attempt at wide coverage, but ideas are welcome.
