@@ -366,7 +366,8 @@ that this list is ordered and higher rules take precedence:
 | `<audio>`             | `'mute'`        | Toggle the `.muted` value                                                            |
 | `<canvas>`            | `'clear'`       | Remove all image data on the canvas (effectively (`.clearRect(0, 0, width, height)`) |
 
-> [!NOTE] The above table is an attempt at wide coverage, but ideas are welcome.
+> [!NOTE]
+> The above table is an attempt at wide coverage, but ideas are welcome.
 > Please submit a PR if you have one!
 
 Depending on the target set by `interesttarget`, showing interest or losing
@@ -381,7 +382,8 @@ rules take precedence:
 | `<* popover=hint>` | `'interest'`     | Call `.showPopover()` on the invokee |
 | `<* popover=hint>` | `'loseinterest'` | Call `.hidePopover()` on the invokee |
 
-> [!NOTE] The above table is an attempt at wide coverage, but ideas are welcome.
+> [!NOTE]
+> The above table is an attempt at wide coverage, but ideas are welcome.
 > Please submit a PR if you have one!
 
 ### Invoke/Interest and Custom Elements
