@@ -11,7 +11,7 @@ touched, or enacted via keypress - dispatch an `InvokeEvent` on the element
 referenced by `invokertarget`, with some default behaviours.
 
 In addition, adding an `interesttarget` attribute to `<button>`, `<a>`,
-`<input>` elements would allow disclosure of high fidelity tooltips in a more
+`<area>`, `<input>` elements would allow disclosure of high fidelity tooltips in a more
 accessible and declaritive way. Elements with `interesttarget` will - when
 hovered, long pressed, or focussed - dispatch an `InterestEvent` on the element
 referenced by `interesttarget`, with some default behaviours.
@@ -86,7 +86,7 @@ the balance.
 In the style of `popovertarget`, this document proposes we add `invokertarget`,
 and `invokeraction` as available attributes to `<button>`,
 `<input type="button">` and `<input type="reset">` elements, as well as an
-`interesttarget` attribute to `<button>`, `<a>`, and `<input>` elements.
+`interesttarget` attribute to `<button>`, `<a>`, `<area>` and `<input>` elements.
 
 ```webidl
 interface mixin InvokerElement {

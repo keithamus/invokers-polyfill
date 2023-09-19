@@ -19,6 +19,7 @@ declare global {
   interface HTMLButtonElement extends InvokerMixin, InterestMixin {}
   interface HTMLInputElement extends InvokerMixin, InterestMixin {}
   interface HTMLAnchorElement extends InterestMixin {}
+  interface HTMLAreaElement extends InterestMixin {}
   interface HTMLSummaryElement extends InterestMixin {}
   /* eslint-enable @typescript-eslint/no-empty-interface */
   interface Window {
