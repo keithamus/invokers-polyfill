@@ -1,5 +1,14 @@
 <!doctype html>
 <html>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/@oddbird/popover-polyfill@0.2.3/dist/popover.css"
+  />
+  <script
+    type="module"
+    async
+    src="https://unpkg.com/@oddbird/popover-polyfill@0.2.3/dist/popover.js"
+  ></script>
   <script type="module">
     import { isSupported, apply } from "./invoker.js";
     if (!isSupported()) apply();
@@ -50,13 +59,57 @@
     </div>
 
     <hr />
-    <button invokertarget="my-video">Play/pause</button>
-    <button invokertarget="my-video" invokeraction="play">Play</button>
-    <button invokertarget="my-video" invokeraction="pause">Pause</button>
-    <button invokertarget="my-video" invokeraction="mute">Mute</button>
-    <button invokertarget="my-video" invokeraction="fullscreen">
+    <button
+      invokertarget="my-video"
+      interesttarget="my-video-playpause-explainer"
+    >
+      Play/pause
+    </button>
+    <div popover id="my-video-playpause-explainer">
+      This button will cause the video to play or pause depending on the current
+      state
+    </div>
+    <button
+      invokertarget="my-video"
+      invokeraction="play"
+      interesttarget="my-video-play-explainer"
+    >
+      Play
+    </button>
+    <div popover id="my-video-play-explainer">
+      This button will cause the video to play if it isn't already
+    </div>
+    <button
+      invokertarget="my-video"
+      invokeraction="pause"
+      interesttarget="my-video-pause-explainer"
+    >
+      Pause
+    </button>
+    <div popover id="my-video-pause-explainer">
+      This button will cause the video to pause if it isn't already
+    </div>
+    <button
+      invokertarget="my-video"
+      invokeraction="mute"
+      interesttarget="my-video-mute-explainer"
+    >
+      Mute
+    </button>
+    <div popover id="my-video-mute-explainer">
+      This button will cause the video mute or unmute depending on the current
+      state
+    </div>
+    <button
+      invokertarget="my-video"
+      invokeraction="fullscreen"
+      interesttarget="my-video-fullscreen-explainer"
+    >
       Fullscreen
     </button>
+    <div popover id="my-video-fullscreen-explainer">
+      This button will cause the video to go into fullscreen
+    </div>
     <video id="my-video" width="720">
       <source
         src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"

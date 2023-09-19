@@ -8,7 +8,6 @@ export function isSupported() {
 
 const ShadowRoot = globalThis.ShadowRoot || function () {};
 
-const trustedEvents = new WeakSet();
 class InvokeEvent extends Event {
   constructor(invokeEventInit = {}) {
     super("invoke", invokeEventInit);
@@ -58,6 +57,7 @@ function applyInvokerMixin(ElementClass) {
         if (targetElement === null) {
           this.removeAttribute("invokertarget");
           invokerAssociatedElements.delete(this);
+          teardownInvokeListeners(this);
         } else if (!(targetElement instanceof Element)) {
           throw new TypeError(
             `invokerTargetElement must be an element or null`,
@@ -65,6 +65,7 @@ function applyInvokerMixin(ElementClass) {
         } else {
           this.setAttribute("invokertarget", "");
           invokerAssociatedElements.set(this, targetElement);
+          setupInvokeListeners(this);
         }
       },
       get() {
@@ -126,6 +127,7 @@ function applyInterestMixin(ElementClass) {
         if (targetElement === null) {
           this.removeAttribute("interesttarget");
           invokerAssociatedElements.delete(this);
+          teardownInterestListeners(this);
         } else if (!(targetElement instanceof Element)) {
           throw new TypeError(
             `invokerTargetElement must be an element or null`,
@@ -133,13 +135,18 @@ function applyInterestMixin(ElementClass) {
         } else {
           this.setAttribute("interesttarget", "");
           invokerAssociatedElements.set(this, targetElement);
+          setupInterestListeners(this);
         }
       },
       get() {
         if (
           this.localName !== "button" &&
+          this.localName !== "a" &&
+          this.localName !== "area" &&
           this.localName !== "input" &&
-          this.localName !== "a"
+          this.localName !== "textarea" &&
+          this.localName !== "select" &&
+          this.localName !== "summary"
         ) {
           return null;
         }
@@ -183,29 +190,27 @@ function handleInvokerActivation(event) {
   const relatedTarget = event.target;
 
   if (!relatedTarget.invokerTargetElement) {
-    relatedTarget.removeEventListener("click", handleInvokerActivation);
-    return;
+    return teardownInvokeListeners(relatedTarget);
   }
 
   switch (event.type) {
     case "click": {
-      const event = new InvokeEvent({
-        action: relatedTarget.invokerAction,
-        relatedTarget,
-      });
-      trustedEvents.add(event);
-      relatedTarget.invokerTargetElement.dispatchEvent(event);
-      break;
+      return handleDefaultInvoke(relatedTarget);
     }
   }
 }
 
 const lastVolumes = new WeakMap();
-function handleDefaultInvoke(event) {
-  if (!trustedEvents.has(event)) return;
+function handleDefaultInvoke(invoker) {
+  const invokee = invoker.invokerTargetElement;
+  const event = new InvokeEvent({
+    action: invoker.invokerAction,
+    relatedTarget: invoker,
+  });
+  invokee.dispatchEvent(event);
   if (event.defaultPrevented) return;
 
-  switch (event.target.localName) {
+  switch (invokee.localName) {
     case "details": {
       switch (event.action) {
         case "auto": {
@@ -301,104 +306,115 @@ function handleInterestActivation(event) {
   const relatedTarget = event.target;
 
   if (!relatedTarget.interestTargetElement) {
-    relatedTarget.removeEventListener("pointerover", handleInterestActivation);
-    relatedTarget.removeEventListener("pointerout", handleInterestActivation);
-    relatedTarget.removeEventListener("focusin", handleInterestActivation);
-    relatedTarget.removeEventListener("focusout", handleInterestActivation);
-    return;
+    return teardownInterestListeners(relatedTarget);
   }
 
   switch (event.type) {
     case "focusin":
     case "pointerover": {
-      const event = new InterestEvent("interest", { relatedTarget });
-      trustedEvents.add(event);
-      relatedTarget.interestTargetElement.dispatchEvent(event);
-      break;
+      return handleDefaultGainInterest(relatedTarget);
     }
     case "focusout":
     case "pointerout": {
-      const event = new InterestEvent("loseinterest", { relatedTarget });
-      trustedEvents.add(event);
-      relatedTarget.interestTargetElement.dispatchEvent(event);
-      break;
+      return handleDefaultLoseInterest(relatedTarget);
     }
   }
 }
 
-function handleDefaultInterest(event) {
-  switch (event.type) {
-    case "interest": {
-      if (event.target.popover && !event.target.matches(":popover-open")) {
-        event.target.showPopover();
-      }
-    }
-    case "loseinterest": {
-      if (event.target.popover && event.target.matches(":popover-open")) {
-        event.target.hidePopover();
-      }
-    }
+function handleDefaultGainInterest(invoker) {
+  const invokee = invoker.interestTargetElement;
+  console.log(" interest", invoker, invokee);
+  const event = new InterestEvent("interest", { relatedTarget: invoker });
+  invokee.dispatchEvent(event);
+  if (event.defaultPrevented) return;
+
+  if (invokee.popover && !event.target.matches(":popover-open")) {
+    invokee.showPopover();
   }
+}
+
+function handleDefaultLoseInterest(invoker) {
+  const invokee = invoker.interestTargetElement;
+  console.log("lose interest", invoker, invokee);
+  const event = new InterestEvent("loseinterest", { relatedTarget: invoker });
+  invokee.dispatchEvent(event);
+  if (event.defaultPrevented) return;
+
+  if (invokee.popover && event.target.matches(":popover-open")) {
+    invokee.hidePopover();
+  }
+}
+
+function setupInvokeListeners(target) {
+  target.addEventListener("click", handleInvokerActivation);
+}
+
+function setupInterestListeners(target) {
+  target.addEventListener("pointerover", handleInterestActivation);
+  target.addEventListener("pointerout", handleInterestActivation);
+  target.addEventListener("focusin", handleInterestActivation);
+  target.addEventListener("focusout", handleInterestActivation);
+}
+
+function teardownInvokeListeners(target) {
+  target.removeEventListener("click", handleInvokerActivation);
+}
+
+function teardownInterestListeners(target) {
+  target.removeEventListener("pointerover", handleInterestActivation);
+  target.removeEventListener("pointerout", handleInterestActivation);
+  target.removeEventListener("focusin", handleInterestActivation);
+  target.removeEventListener("focusout", handleInterestActivation);
+}
+
+function observeShadowRoots(ElementClass, callback) {
+  const attachShadow = ElementClass.prototype.attachShadow;
+  ElementClass.prototype.attachShadow = function (init) {
+    const shadow = attachShadow.call(this, init);
+    callback(shadow);
+    return shadow;
+  };
 }
 
 export function apply() {
-  new MutationObserver((mutations) => {
+  const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       if (mutation.type === "attributes") {
         if (
           mutation.attributeName === "invokertarget" &&
           mutation.target.invokerTargetElement
         ) {
-          mutation.target.addEventListener("click", handleInvokerActivation);
-          mutation.target.addEventListener("keypress", handleInvokerActivation);
+          setupInvokeListeners(mutation.target);
         } else if (
           mutation.attributeName === "invokertarget" &&
           mutation.target.invokerTargetElement
         ) {
-          mutation.target.addEventListener(
-            "pointerover",
-            handleInterestActivation,
-          );
-          mutation.target.addEventListener(
-            "pointerout",
-            handleInterestActivation,
-          );
-          mutation.target.addEventListener("focusin", handleInterestActivation);
-          mutation.target.addEventListener(
-            "focusout",
-            handleInterestActivation,
-          );
+          setupInterestListeners(mutation.target);
         }
       }
     }
-  }).observe(document, {
+  });
+  const observerOptions = {
     childList: true,
     subtree: true,
     attributes: true,
     attributeFilter: ["invokertarget", "interesttarget"],
-  });
+  };
+  observer.observe(document, observerOptions);
 
   applyInvokerMixin(globalThis.HTMLButtonElement || function () {});
   applyInvokerMixin(globalThis.HTMLInputElement || function () {});
 
-  applyInterestMixin(globalThis.HTMLInputElement || function () {});
-  applyInterestMixin(globalThis.HTMLButtonElement || function () {});
-  applyInterestMixin(globalThis.HTMLAnchorElement || function () {});
+  applyInterestMixin(globalThis.HTMLElement || function () {});
 
-  document.addEventListener("click", handleInvokerActivation);
+  observeShadowRoots(globalThis.HTMLElement || function () {}, (shadow) => {
+    observer.observe(shadow, observerOptions);
+  });
 
-  document.addEventListener("pointerover", handleInterestActivation);
-  document.addEventListener("pointerout", handleInterestActivation);
-  document.addEventListener("focusin", handleInterestActivation);
-  document.addEventListener("focusout", handleInterestActivation);
-
-  document.addEventListener("invoke", handleDefaultInvoke, {
-    capture: true,
-  });
-  document.addEventListener("interest", handleDefaultInterest, {
-    capture: true,
-  });
-  document.addEventListener("loseinterest", handleDefaultInterest, {
-    capture: true,
-  });
+  for (const invoker of document.querySelectorAll("[invokertarget]")) {
+    setupInvokeListeners(invoker);
+  }
+  for (const invoker of document.querySelectorAll("[interesttarget]")) {
+    setupInterestListeners(invoker);
+  }
 }
