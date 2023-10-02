@@ -1,5 +1,7 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+  <title>Invoker Buttons Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link
     rel="stylesheet"
     href="https://unpkg.com/@oddbird/popover-polyfill@0.2.3/dist/popover.css"
@@ -57,8 +59,8 @@
     </button>
 
     <dialog id="my-dialog">
-      <button invoketarget="my-dialog">x</button>
-      This is a dialog. Click the X to close it
+      <button invoketarget="my-dialog" aria-label="Close dialog">x</button>
+      This is a dialog. Press the Close button (X) to close it
     </dialog>
 
     <div popover id="dialog-explainer">
@@ -75,7 +77,7 @@
     </select>
 
     <div popover id="select-explainer">
-      This button will open the select element, in browsers that support select.showPicker()
+      This button will open the select element, in browsers that support <code>select.showPicker()</code>
     </div>
     <hr />
     <button
@@ -129,7 +131,7 @@
     <div popover id="my-video-fullscreen-explainer">
       This button will cause the video to go into fullscreen
     </div>
-    <video id="my-video" width="720">
+    <video id="my-video" width="100%" controls>
       <source
         src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         type="video/mp4"
