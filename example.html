@@ -14,7 +14,7 @@
     if (!isSupported()) apply();
   </script>
   <body>
-    <h1>InvokerTarget &amp; InvokerAction</h1>
+    <h1>InvokeTarget &amp; InvokeAction</h1>
     <p>
       This is a demonstration page of the explainer found at
       <a href="https://github.com/keithamus/invoker-buttons-proposal"
@@ -26,18 +26,18 @@
       future all of the below will work without any JavaScript!
     </p>
     <hr />
-    <button invokertarget="my-file-input">
+    <button invoketarget="my-file-input">
       This will open the file picker
     </button>
     <input type="file" id="my-file-input" />
     <hr />
-    <button invokertarget="my-date-input" invokeraction="showPicker">
+    <button invoketarget="my-date-input" invokeaction="showPicker">
       This should open the date picker
     </button>
     <input type="date" id="my-date-input" />
     <hr />
 
-    <button invokertarget="my-details" interesttarget="button-explainer">
+    <button invoketarget="my-details" interesttarget="button-explainer">
       This will open the details
     </button>
 
@@ -52,12 +52,12 @@
 
     <hr />
 
-    <button invokertarget="my-dialog" interesttarget="dialog-explainer">
+    <button invoketarget="my-dialog" interesttarget="dialog-explainer">
       This will open the dialog
     </button>
 
     <dialog id="my-dialog">
-      <button invokertarget="my-dialog">x</button>
+      <button invoketarget="my-dialog">x</button>
       This is a dialog. Click the X to close it
     </dialog>
 
@@ -79,7 +79,7 @@
     </div>
     <hr />
     <button
-      invokertarget="my-video"
+      invoketarget="my-video"
       interesttarget="my-video-playpause-explainer"
     >
       Play/pause
@@ -89,8 +89,8 @@
       state
     </div>
     <button
-      invokertarget="my-video"
-      invokeraction="play"
+      invoketarget="my-video"
+      invokeaction="play"
       interesttarget="my-video-play-explainer"
     >
       Play
@@ -99,8 +99,8 @@
       This button will cause the video to play if it isn't already
     </div>
     <button
-      invokertarget="my-video"
-      invokeraction="pause"
+      invoketarget="my-video"
+      invokeaction="pause"
       interesttarget="my-video-pause-explainer"
     >
       Pause
@@ -109,8 +109,8 @@
       This button will cause the video to pause if it isn't already
     </div>
     <button
-      invokertarget="my-video"
-      invokeraction="mute"
+      invoketarget="my-video"
+      invokeaction="mute"
       interesttarget="my-video-mute-explainer"
     >
       Mute
@@ -120,8 +120,8 @@
       state
     </div>
     <button
-      invokertarget="my-video"
-      invokeraction="requestfullscreen"
+      invoketarget="my-video"
+      invokeaction="requestfullscreen"
       interesttarget="my-video-fullscreen-explainer"
     >
       Fullscreen
