@@ -194,8 +194,8 @@ If a `<button>` is a form participant, or has `type=submit`, then `invoketarget`
 _must_ be ignored. `interesttarget` is still valid in these scenarios.
 
 If an `<input>` is a form participant, or has a `type` other than `reset` or
-`button`, then `invoketarget` _must_ be ignored. `interesttarget` is still valid
-in these scenarios.
+`button`, then `invoketarget` and `interesttarget` _must_ be ignored. `interesttarget` 
+additionally works with `type` of `submit`.
 
 ### Example Code
 
