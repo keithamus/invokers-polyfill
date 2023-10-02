@@ -2,7 +2,7 @@ export function isSupported() {
   return (
     typeof HTMLButtonElement !== "undefined" &&
     typeof HTMLButtonElement.prototype === "object" &&
-    "invokerTargetElement" in HTMLButtonElement.prototype
+    "invokeTargetElement" in HTMLButtonElement.prototype
   );
 }
 
@@ -50,20 +50,20 @@ function getRootNode(node) {
 
 function applyInvokerMixin(ElementClass) {
   Object.defineProperties(ElementClass.prototype, {
-    invokerTargetElement: {
+    invokeTargetElement: {
       enumerable: true,
       configurable: true,
       set(targetElement) {
         if (targetElement === null) {
-          this.removeAttribute("invokertarget");
+          this.removeAttribute("invoketarget");
           invokerAssociatedElements.delete(this);
           teardownInvokeListeners(this);
         } else if (!(targetElement instanceof Element)) {
           throw new TypeError(
-            `invokerTargetElement must be an element or null`,
+            `invokeTargetElement must be an element or null`,
           );
         } else {
-          this.setAttribute("invokertarget", "");
+          this.setAttribute("invoketarget", "");
           invokerAssociatedElements.set(this, targetElement);
           setupInvokeListeners(this);
         }
@@ -96,7 +96,7 @@ function applyInvokerMixin(ElementClass) {
           }
         }
         const root = getRootNode(this);
-        const idref = this.getAttribute("invokertarget");
+        const idref = this.getAttribute("invoketarget");
         if ((root instanceof Document || root instanceof ShadowRoot) && idref) {
           return root.getElementById(idref) || null;
         }
@@ -107,12 +107,12 @@ function applyInvokerMixin(ElementClass) {
       enumerable: true,
       configurable: true,
       get() {
-        const value = (this.getAttribute("invokeraction") || "").toLowerCase();
+        const value = (this.getAttribute("invokeaction") || "").toLowerCase();
         if (value) return value;
         return "auto";
       },
       set(value) {
-        this.setAttribute("invokeraction", value);
+        this.setAttribute("invokeaction", value);
       },
     },
   });
@@ -130,7 +130,7 @@ function applyInterestMixin(ElementClass) {
           teardownInterestListeners(this);
         } else if (!(targetElement instanceof Element)) {
           throw new TypeError(
-            `invokerTargetElement must be an element or null`,
+            `invokeTargetElement must be an element or null`,
           );
         } else {
           this.setAttribute("interesttarget", "");
@@ -185,7 +185,7 @@ function handleInvokerActivation(event) {
   if (event.defaultPrevented) return;
   const relatedTarget = event.target;
 
-  if (!relatedTarget.invokerTargetElement) {
+  if (!relatedTarget.invokeTargetElement) {
     return teardownInvokeListeners(relatedTarget);
   }
 
@@ -198,7 +198,7 @@ function handleInvokerActivation(event) {
 
 const lastVolumes = new WeakMap();
 function handleDefaultInvoke(invoker) {
-  const invokee = invoker.invokerTargetElement;
+  const invokee = invoker.invokeTargetElement;
   const event = new InvokeEvent({
     action: invoker.invokerAction,
     relatedTarget: invoker,
@@ -395,13 +395,13 @@ export function apply() {
     for (const mutation of mutations) {
       if (mutation.type === "attributes") {
         if (
-          mutation.attributeName === "invokertarget" &&
-          mutation.target.invokerTargetElement
+          mutation.attributeName === "invoketarget" &&
+          mutation.target.invokeTargetElement
         ) {
           setupInvokeListeners(mutation.target);
         } else if (
-          mutation.attributeName === "invokertarget" &&
-          mutation.target.invokerTargetElement
+          mutation.attributeName === "invoketarget" &&
+          mutation.target.invokeTargetElement
         ) {
           setupInterestListeners(mutation.target);
         }
@@ -412,7 +412,7 @@ export function apply() {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ["invokertarget", "interesttarget"],
+    attributeFilter: ["invoketarget", "interesttarget"],
   };
   observer.observe(document, observerOptions);
 
@@ -427,7 +427,7 @@ export function apply() {
     observer.observe(shadow, observerOptions);
   });
 
-  for (const invoker of document.querySelectorAll("[invokertarget]")) {
+  for (const invoker of document.querySelectorAll("[invoketarget]")) {
     setupInvokeListeners(invoker);
   }
   for (const invoker of document.querySelectorAll("[interesttarget]")) {
