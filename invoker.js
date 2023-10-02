@@ -228,6 +228,12 @@ function handleDefaultInvoke(invoker) {
       }
       break;
     }
+    case "select": {
+      if (event.action === "auto" || event.action === "showpicker") {
+        event.target.showPicker?.();
+      }
+      break;
+    }
 
     case "details": {
       switch (event.action) {

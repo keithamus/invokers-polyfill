@@ -69,6 +69,18 @@
     </div>
 
     <hr />
+    <button invokertarget="my-select" interesttarget="select-explainer">
+      This will open the select
+    </button>
+    <select id="my-select">
+      <option>Option 1</option>
+      <option>Option 2</option>
+    </select>
+
+    <div popover id="select-explainer">
+      This button will open the select element, in browsers that support select.showPicker()
+    </div>
+    <hr />
     <button
       invokertarget="my-video"
       interesttarget="my-video-playpause-explainer"
