@@ -5,7 +5,7 @@
 ```html
 <button invoketarget="my-dialog">This opens a dialog</button>
 
-<dialog>This is the dialog</dialog>
+<dialog id="my-dialog">This is the dialog</dialog>
 ```
 
 ## Summary
