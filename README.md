@@ -2,13 +2,13 @@
 
 ## Summary
 
-Adding `invokertarget` and `invokeraction` attributes to `<button>` and
+Adding `invoketarget` and `invokeaction` attributes to `<button>` and
 `<input type="button">` / `<input type="reset">` elements would allow authors to
 assign behaviour to buttons in a more accessible and declarative way, while
 reducing bugs and simplifying the amount of JavaScript pages are required to
-ship for interactivity. Buttons with `invokertarget` will - when clicked,
+ship for interactivity. Buttons with `invoketarget` will - when clicked,
 touched, or enacted via keypress - dispatch an `InvokeEvent` on the element
-referenced by `invokertarget`, with some default behaviours.
+referenced by `invoketarget`, with some default behaviours.
 
 In addition, this proposals seeks to add an `interesttarget` attribute to
 interactive elements: starting with `<button>`,
@@ -78,25 +78,25 @@ the balance.
   such as eye tracking or game controllers, the equivalent "focusout or
   mouseout" action is used to _Lose Interest_ on the element.
 - Invoker: An invoker is a button element (that is a `<button>`,
-  `<input type="button">`, or `<input type="reset">`) that has an
-  `invokertarget` attribute set.
+  `<input type="button">`, or `<input type="reset">`) that has an `invoketarget`
+  attribute set.
 - Invokee: An element which is referenced to by an Invoker, via the
-  `invokertarget` attribute.
+  `invoketarget` attribute.
 - Interestee: An element which is referenced to by an Interest element, via the
   `interesttarget` attribute.
 
 ## Proposed Plan
 
-In the style of `popovertarget`, this document proposes we add `invokertarget`,
-and `invokeraction` as available attributes to `<button>`,
+In the style of `popovertarget`, this document proposes we add `invoketarget`,
+and `invokeaction` as available attributes to `<button>`,
 `<input type="button">` and `<input type="reset">` elements, as well as an
 `interesttarget` attribute to `<button>`, `<a>`, `<area>` and `<input>`
 elements.
 
 ```webidl
 interface mixin InvokerElement {
-  [CEReactions] attribute Element? invokerTargetElement;
-  [CEReactions] attribute DOMString invokerAction;
+  [CEReactions] attribute Element? invokeTargetElement;
+  [CEReactions] attribute DOMString invokeAction;
 };
 interface mixing InterestElement {
   [CEReactions] attribute Element? interestTargetElement;
@@ -110,19 +110,19 @@ HTMLInputElement extends InterestElement
 HTMLAnchorElement extends InterestElement
 ```
 
-The `invokertarget` value should be an IDREF pointing to an element within the
-document. `.invokerTargetElement` also exists on the element to imperatively
+The `invoketarget` value should be an IDREF pointing to an element within the
+document. `.invokeTargetElement` also exists on the element to imperatively
 assign a node to be the invoker target, allowing for cross-root invokers (in
 some cases, see
 [the popovertarget attr-asociated element steps](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element)
 for more).
 
-The `invokeraction` (and the `.invokerAction` reflected property) is a freeform
-hint to the Invokee. If `invokeraction` is a falsey value (`''`, `null`, etc.)
+The `invokeaction` (and the `.invokeAction` reflected property) is a freeform
+hint to the Invokee. If `invokeaction` is a falsey value (`''`, `null`, etc.)
 then it will default to `'auto'`. Values which are not recognised should be
 passed verbatim, and should not be assumed to be `auto`. This allows for custom
 actions. Built-in interactive elements have built-in behaviours (detailed below)
-which are determined by the `invokeraction` but also Invokees will dispatch
+which are determined by the `invokeaction` but also Invokees will dispatch
 events when Invoked, allowing custom code to take control of invocations without
 having to manually wire up DOM nodes for the variety of invocation patterns.
 
@@ -133,10 +133,10 @@ some cases, see
 [the popovertarget attr-asociated element steps](https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#attr-associated-element)
 for more).
 
-Elements with `invokertarget` set will dispatch an `InvokeEvent` on the
-_Invokee_ (the element referenced by `invokertarget`) when the element is
-_Invoked_. The `InvokeEvent`'s `type` is always `invoke`. The event also
-contains a `relatedTarget` property that will reference the _Invoker_ element.
+Elements with `invoketarget` set will dispatch an `InvokeEvent` on the _Invokee_
+(the element referenced by `invoketarget`) when the element is _Invoked_. The
+`InvokeEvent`'s `type` is always `invoke`. The event also contains a
+`relatedTarget` property that will reference the _Invoker_ element.
 `InvokeEvents` are always non-bubbling, cancellable events.
 
 ```webidl
@@ -174,31 +174,30 @@ dictionary InterestEventInit : EventInit {
 };
 ```
 
-Both `interesttarget` and `invokertarget` can exist on the same element at the
+Both `interesttarget` and `invoketarget` can exist on the same element at the
 same time, and both should be respected.
 
-If an element also has both a `popovertarget` and `invokertarget` attribute,
-then `popovertarget` _must_ be ignored: `invokertarget` takes precedence. An
-element with both `interesttarget` and `popovertarget` is valid and both actions
-will work.
+If an element also has both a `popovertarget` and `invoketarget` attribute, then
+`popovertarget` _must_ be ignored: `invoketarget` takes precedence. An element
+with both `interesttarget` and `popovertarget` is valid and both actions will
+work.
 
-If a `<button>` is a form participant, or has `type=submit`, then
-`invokertarget` _must_ be ignored. `interesttarget` is still valid in these
-scenarios.
+If a `<button>` is a form participant, or has `type=submit`, then `invoketarget`
+_must_ be ignored. `interesttarget` is still valid in these scenarios.
 
 If an `<input>` is a form participant, or has a `type` other than `reset` or
-`button`, then `invokertarget` _must_ be ignored. `interesttarget` is still
-valid in these scenarios.
+`button`, then `invoketarget` _must_ be ignored. `interesttarget` is still valid
+in these scenarios.
 
 ### Example Code
 
 #### Popovers
 
-When pointing to a `popover`, `invokertarget` acts like much like
+When pointing to a `popover`, `invoketarget` acts like much like
 `popovertarget`, allowing the toggling of popovers.
 
 ```html
-<button invokertarget="my-popover">Open Popover</button>
+<button invoketarget="my-popover">Open Popover</button>
 <!-- Effectively the same as popovertarget="my-popover" -->
 
 <div id="my-popover" popover="auto">Hello world</div>
@@ -214,26 +213,26 @@ An `interesttarget` allows for tooltips using `popover`:
 
 #### Dialogs
 
-When pointing to a `<dialog>`, `invokertarget` can toggle a `<dialog>`'s
+When pointing to a `<dialog>`, `invoketarget` can toggle a `<dialog>`'s
 openness.
 
 ```html
-<button invokertarget="my-dialog">Open Dialog</button>
+<button invoketarget="my-dialog">Open Dialog</button>
 
 <dialog id="my-dialog">
   Hello world!
 
-  <button invokertarget="my-dialog" invokeraction="close">Close</button>
+  <button invoketarget="my-dialog" invokeaction="close">Close</button>
 </dialog>
 ```
 
 #### Details
 
-When pointing to a `<details>`, `invokertarget` can toggle a `<details>`'
+When pointing to a `<details>`, `invoketarget` can toggle a `<details>`'
 openness.
 
 ```html
-<button invokertarget="my-details">Open Details</button>
+<button invoketarget="my-details">Open Details</button>
 <!-- Can be used to replicate the `<summary>` interaction -->
 
 <details id="my-details">
@@ -244,25 +243,25 @@ openness.
 
 #### Customizing `input type=file`
 
-Pointing an `invokertarget` to an `<input type="file">` acts the same as the
+Pointing an `invoketarget` to an `<input type="file">` acts the same as the
 rendered button _within_ the input; and can be used to declare a customised
 alternative button to the input's button.
 
 ```html
-<button invokertarget="my-file">Pick a file...</button>
+<button invoketarget="my-file">Pick a file...</button>
 
 <input id="my-file" type="file" />
 ```
 
 #### Customizing video/audio controls
 
-The `<video>` and `<audio>` tags have many interactions, here `invokeraction`
+The `<video>` and `<audio>` tags have many interactions, here `invokeaction`
 shines, allowing multiple buttons to handle different interactions with the
 video player.
 
 ```html
-<button invokertarget="my-video">Play/Pause</button>
-<button invokertarget="my-video" invokeraction="mute">Mute</button>
+<button invoketarget="my-video">Play/Pause</button>
+<button invoketarget="my-video" invokeaction="mute">Mute</button>
 
 <video id="my-video"></video>
 ```
@@ -274,8 +273,8 @@ JavaScript to be triggered without having to wire up manual event handlers to
 the Invokers.
 
 ```html
-<button invokertarget="my-custom">Invoke a div... to do something?</button>
-<button invokertarget="my-custom" invokeraction="frobulate">Frobulate</button>
+<button invoketarget="my-custom">Invoke a div... to do something?</button>
+<button invoketarget="my-custom" invokeaction="frobulate">Frobulate</button>
 
 <div id="my-custom"></div>
 
@@ -341,41 +340,41 @@ TBD: Accessibility attributes for `interesttarget`.
 
 ### Defaults
 
-Depending on the target set by `invokertarget`, invoking the button will trigger
-additional behaviours alongside the event dispatch. Invoking an invokertarget
+Depending on the target set by `invoketarget`, invoking the button will trigger
+additional behaviours alongside the event dispatch. Invoking an invoketarget
 will _always_ dispatch a trusted `InvokeEvent`, but in addition the following
 table represents how invocations on specific element types are handled. Note
 that this list is ordered and higher rules take precedence:
 
-| Invokee Element       | `action` hint         | Behaviour                                                                            |
-|:----------------------|:----------------------|:-------------------------------------------------------------------------------------|
-| `<* popover>`         | `'auto'`              | Call `.togglePopover()` on the invokee                                               |
-| `<* popover>`         | `'hidePopover'`       | Call `.hidePopover()` on the invokee                                                 |
-| `<* popover>`         | `'showPopover'`       | Call `.showPopover()` on the invokee                                                 |
-| `<dialog>`            | `'auto'`              | If the `<dialog>` is not `open`, call `showModal()`, otherwise cancel the dialog     |
-| `<dialog>`            | `'showModal'`         | If the `<dialog>` is not `open`, call `showModal()`                                  |
-| `<dialog>`            | `'close'`             | If the `<dialog>` is `open`, cancel the dialog                                       |
-| `<details>`           | `'auto'`              | If the `<details>` is `open`, then close it, otherwise open it                       |
-| `<details>`           | `'open'`              | If the `<details>` is not `open`, then open it                                       |
-| `<details>`           | `'close'`             | If the `<details>` is `open`, then close it                                          |
-| `<select>`            | `'auto'`              | Open the `<select>` option picker UI                                                 |
-| `<input>`             | `'auto'`              | Call `.showPicker()` on the invokee                                                  |
-| `<video>`             | `'auto'`              | Toggle the `.playing` value                                                          |
-| `<video>`             | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
-| `<video>`             | `'play'`              | If `.playing` is `false`, set it to `true`                                           |
-| `<video>`             | `'mute'`              | Toggle the `.muted` value                                                            |
-| `<audio>`             | `'auto'`              | Toggle the `.playing` value                                                          |
-| `<audio>`             | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
-| `<audio>`             | `'play'`              | If `.playing` is `false`, set it to `true`                                           |
-| `<audio>`             | `'mute'`              | Toggle the `.muted` value                                                            |
-| `<canvas>`            | `'clear'`             | Remove all image data on the canvas (effectively (`.clearRect(0, 0, width, height)`) |
-| `<*>`                 | `'toggleFullscreen'`  | If the element is fullscreen, then exit, otherwise request to enter                  |
-| `<*>`                 | `'requestFullscreen'` | Request the element to enter into 'fullscreen' mode                                  |
-| `<*>`                 | `'exitFullscreen'`    | Request the element to exit 'fullscreen' mode                                        |
+| Invokee Element | `action` hint         | Behaviour                                                                            |
+| :-------------- | :-------------------- | :----------------------------------------------------------------------------------- |
+| `<* popover>`   | `'auto'`              | Call `.togglePopover()` on the invokee                                               |
+| `<* popover>`   | `'hidePopover'`       | Call `.hidePopover()` on the invokee                                                 |
+| `<* popover>`   | `'showPopover'`       | Call `.showPopover()` on the invokee                                                 |
+| `<dialog>`      | `'auto'`              | If the `<dialog>` is not `open`, call `showModal()`, otherwise cancel the dialog     |
+| `<dialog>`      | `'showModal'`         | If the `<dialog>` is not `open`, call `showModal()`                                  |
+| `<dialog>`      | `'close'`             | If the `<dialog>` is `open`, cancel the dialog                                       |
+| `<details>`     | `'auto'`              | If the `<details>` is `open`, then close it, otherwise open it                       |
+| `<details>`     | `'open'`              | If the `<details>` is not `open`, then open it                                       |
+| `<details>`     | `'close'`             | If the `<details>` is `open`, then close it                                          |
+| `<select>`      | `'auto'`              | Open the `<select>` option picker UI                                                 |
+| `<input>`       | `'auto'`              | Call `.showPicker()` on the invokee                                                  |
+| `<video>`       | `'auto'`              | Toggle the `.playing` value                                                          |
+| `<video>`       | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
+| `<video>`       | `'play'`              | If `.playing` is `false`, set it to `true`                                           |
+| `<video>`       | `'mute'`              | Toggle the `.muted` value                                                            |
+| `<audio>`       | `'auto'`              | Toggle the `.playing` value                                                          |
+| `<audio>`       | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
+| `<audio>`       | `'play'`              | If `.playing` is `false`, set it to `true`                                           |
+| `<audio>`       | `'mute'`              | Toggle the `.muted` value                                                            |
+| `<canvas>`      | `'clear'`             | Remove all image data on the canvas (effectively (`.clearRect(0, 0, width, height)`) |
+| `<*>`           | `'toggleFullscreen'`  | If the element is fullscreen, then exit, otherwise request to enter                  |
+| `<*>`           | `'requestFullscreen'` | Request the element to enter into 'fullscreen' mode                                  |
+| `<*>`           | `'exitFullscreen'`    | Request the element to exit 'fullscreen' mode                                        |
 
-> [!NOTE]
-> The above table is an attempt at wide coverage, but ideas are welcome.
-> Please submit a PR if you have one!
+> [!NOTE]\
+> The above table is an attempt at wide coverage, but ideas are welcome. Please
+> submit a PR if you have one!
 
 Depending on the target set by `interesttarget`, showing interest or losing
 interest can trigger additional behaviours alongside the event dispatch.
@@ -389,9 +388,9 @@ rules take precedence:
 | `<* popover=hint>` | `'interest'`     | Call `.showPopover()` on the invokee |
 | `<* popover=hint>` | `'loseinterest'` | Call `.hidePopover()` on the invokee |
 
-> [!NOTE]
-> The above table is an attempt at wide coverage, but ideas are welcome.
-> Please submit a PR if you have one!
+> [!NOTE]\
+> The above table is an attempt at wide coverage, but ideas are welcome. Please
+> submit a PR if you have one!
 
 ### Invoke/Interest and Custom Elements
 
@@ -402,8 +401,8 @@ behaviours. Consider the following:
 ```html
 <button
   interesttarget="my-element"
-  invokertarget="my-element"
-  invokeraction="spin"
+  invoketarget="my-element"
+  invokeaction="spin"
 >
   Spin the widget
 </button>
@@ -459,13 +458,13 @@ replace Reset or Submit buttons. If you want to control forms, use those.
 Defaults for `<a>` are intentionally omitted as this proposal does not aim to
 replace anchors. If you intend to produce a page navigation, use an `<a>` tag.
 
-### Why is `invokertarget` limited to buttons?
+### Why is `invoketarget` limited to buttons?
 
 This is by design, to allow for a "pit of success"; invoking actions on
 non-button elements such as `<div>`s or `<a>`s creates many problems, especially
 for non-interactive elements. While `<a>`s _are_ interactive, they should _only_
 be used for page navigation and not for invoking other behaviours, and so
-`invokertarget` should not be allowed.
+`invoketarget` should not be allowed.
 
 #### Why isn't `input[type=submit]` included?
 
@@ -486,7 +485,7 @@ a form:
   <form>
     <input type="text" />
     <!-- This button closes the dialog _and_ resets the form -->
-    <input type="reset" invokertarget="my-dialog" value="Cancel" />
+    <input type="reset" invoketarget="my-dialog" value="Cancel" />
   </form>
 </dialog>
 ```
@@ -509,19 +508,19 @@ developers to use it only on interactive elements, where it makes sense.
 
 #### What does this mean for `popovertarget`?
 
-Whilst `invokertarget` _does_ replicate `popovertarget`'s functionality, it does
+Whilst `invoketarget` _does_ replicate `popovertarget`'s functionality, it does
 not necessarily mean `popovertarget` gets removed from the spec.
 
-#### InvokerTarget seems limited, what if I wanted to add arguments?
+#### InvokeTarget seems limited, what if I wanted to add arguments?
 
-`invokeraction` is a freeform text hint to your own elements. If you feel it
+`invokeaction` is a freeform text hint to your own elements. If you feel it
 necessary you can invent your own DSLs for passing extra data using this hint.
 For example:
 
 ```html
-<button invokertarget="my-counter" invokeraction="add:1">Add 1</button>
-<button invokertarget="my-counter" invokeraction="add:2">Add 2</button>
-<button invokertarget="my-counter" invokeraction="add:10">Add 10</button>
+<button invoketarget="my-counter" invokeaction="add:1">Add 1</button>
+<button invoketarget="my-counter" invokeaction="add:2">Add 2</button>
+<button invoketarget="my-counter" invokeaction="add:10">Add 10</button>
 
 <input readonly id="my-counter" value="0" />
 
