@@ -1,5 +1,13 @@
 # Invoker Buttons
 
+## Pitch in Code
+
+```html
+<button invoketarget="my-dialog">This opens a dialog</button>
+
+<dialog>This is the dialog</dialog>
+```
+
 ## Summary
 
 Adding `invoketarget` and `invokeaction` attributes to `<button>` and
