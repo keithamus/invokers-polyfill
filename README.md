@@ -11,11 +11,14 @@ touched, or enacted via keypress - dispatch an `InvokeEvent` on the element
 referenced by `invokertarget`, with some default behaviours.
 
 In addition, this proposals seeks to add an `interesttarget` attribute to
-interactive elements: `<button>`, `<a>`, `<area>`, `<input>`, `<textarea>`,
-`<select>`, `<summary>`. This would allow disclosure of high fidelity tooltips
-in a more accessible and declarative way. Elements with `interesttarget` will -
-when hovered, long pressed, or focussed - dispatch an `InterestEvent` on the
-element referenced by `interesttarget`, with some default behaviours.
+interactive elements: starting with `<button>`,
+`<input type="button">`/`<input type="reset">`, and `<a>` (perhaps expanding to
+`<area>`, `<input>`, `<textarea>`, `<select>`, `<summary>` or maybe more, see
+[#14](https://github.com/keithamus/invoker-buttons-proposal/issues/14)). This
+would allow disclosure of high fidelity tooltips in a more accessible and
+declarative way. Elements with `interesttarget` will - when hovered, long
+pressed, or focussed - dispatch an `InterestEvent` on the element referenced by
+`interesttarget`, with some default behaviours.
 
 ## Background
 
@@ -102,7 +105,9 @@ interface mixing InterestElement {
 HTMLButtonElement extends InvokerElement
 HTMLInputElement extends InvokerElement
 
-HTMLElement extends InterestElement
+HTMLButtonElement extends InterestElement
+HTMLInputElement extends InterestElement
+HTMLAnchorElement extends InterestElement
 ```
 
 The `invokertarget` value should be an IDREF pointing to an element within the

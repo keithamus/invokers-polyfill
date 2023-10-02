@@ -142,11 +142,7 @@ function applyInterestMixin(ElementClass) {
         if (
           this.localName !== "button" &&
           this.localName !== "a" &&
-          this.localName !== "area" &&
-          this.localName !== "input" &&
-          this.localName !== "textarea" &&
-          this.localName !== "select" &&
-          this.localName !== "summary"
+          this.localName !== "input"
         ) {
           return null;
         }
@@ -423,7 +419,9 @@ export function apply() {
   applyInvokerMixin(globalThis.HTMLButtonElement || function () {});
   applyInvokerMixin(globalThis.HTMLInputElement || function () {});
 
-  applyInterestMixin(globalThis.HTMLElement || function () {});
+  applyInterestMixin(globalThis.HTMLButtonElement || function () {});
+  applyInterestMixin(globalThis.HTMLInputElement || function () {});
+  applyInterestMixin(globalThis.HTMLAnchorElement || function () {});
 
   observeShadowRoots(globalThis.HTMLElement || function () {}, (shadow) => {
     observer.observe(shadow, observerOptions);
