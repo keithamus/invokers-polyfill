@@ -406,8 +406,8 @@ export function apply() {
         ) {
           setupInvokeListeners(mutation.target);
         } else if (
-          mutation.attributeName === "invoketarget" &&
-          mutation.target.invokeTargetElement
+          mutation.attributeName === "interesttarget" &&
+          mutation.target.interestTargetElement
         ) {
           setupInterestListeners(mutation.target);
         }
