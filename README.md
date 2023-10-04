@@ -368,10 +368,12 @@ that this list is ordered and higher rules take precedence:
 | `<select>`      | `'auto'`              | Open the `<select>` option picker UI                                                 |
 | `<input>`       | `'auto'`              | Call `.showPicker()` on the invokee                                                  |
 | `<video>`       | `'auto'`              | Toggle the `.playing` value                                                          |
+| `<video>`       | `'playpause'`         | Toggle the `.playing` value                                                          |
 | `<video>`       | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
 | `<video>`       | `'play'`              | If `.playing` is `false`, set it to `true`                                           |
 | `<video>`       | `'mute'`              | Toggle the `.muted` value                                                            |
 | `<audio>`       | `'auto'`              | Toggle the `.playing` value                                                          |
+| `<audio>`       | `'playpause'`         | Toggle the `.playing` value                                                          |
 | `<audio>`       | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
 | `<audio>`       | `'play'`              | If `.playing` is `false`, set it to `true`                                           |
 | `<audio>`       | `'mute'`              | Toggle the `.muted` value                                                            |
