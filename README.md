@@ -369,7 +369,9 @@ that this list is ordered and higher rules take precedence:
 | `<details>`     | `'open'`              | If the `<details>` is not `open`, then open it                                       |
 | `<details>`     | `'close'`             | If the `<details>` is `open`, then close it                                          |
 | `<select>`      | `'auto'`              | Open the `<select>` option picker UI                                                 |
+| `<select>`      | `'showPicker'`        | Open the `<select>` option picker UI                                                 |
 | `<input>`       | `'auto'`              | Call `.showPicker()` on the invokee                                                  |
+| `<input>`       | `'showPicker'`        | Call `.showPicker()` on the invokee                                                  |
 | `<video>`       | `'auto'`              | Toggle the `.playing` value                                                          |
 | `<video>`       | `'playpause'`         | Toggle the `.playing` value                                                          |
 | `<video>`       | `'pause'`             | If `.playing` is `true`, set it to `false`                                           |
