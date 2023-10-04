@@ -357,12 +357,15 @@ that this list is ordered and higher rules take precedence:
 | Invokee Element | `action` hint         | Behaviour                                                                            |
 | :-------------- | :-------------------- | :----------------------------------------------------------------------------------- |
 | `<* popover>`   | `'auto'`              | Call `.togglePopover()` on the invokee                                               |
+| `<* popover>`   | `'togglePopvoer'`     | Call `.togglePopover()` on the invokee                                               |
 | `<* popover>`   | `'hidePopover'`       | Call `.hidePopover()` on the invokee                                                 |
 | `<* popover>`   | `'showPopover'`       | Call `.showPopover()` on the invokee                                                 |
 | `<dialog>`      | `'auto'`              | If the `<dialog>` is not `open`, call `showModal()`, otherwise cancel the dialog     |
+| `<dialog>`      | `'toggleModal'`       | If the `<dialog>` is not `open`, call `showModal()`, otherwise cancel the dialog     |
 | `<dialog>`      | `'showModal'`         | If the `<dialog>` is not `open`, call `showModal()`                                  |
 | `<dialog>`      | `'close'`             | If the `<dialog>` is `open`, cancel the dialog                                       |
 | `<details>`     | `'auto'`              | If the `<details>` is `open`, then close it, otherwise open it                       |
+| `<details>`     | `'toggle'`            | If the `<details>` is `open`, then close it, otherwise open it                       |
 | `<details>`     | `'open'`              | If the `<details>` is not `open`, then open it                                       |
 | `<details>`     | `'close'`             | If the `<details>` is `open`, then close it                                          |
 | `<select>`      | `'auto'`              | Open the `<select>` option picker UI                                                 |
