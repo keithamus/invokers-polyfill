@@ -362,8 +362,9 @@ that this list is ordered and higher rules take precedence:
 | `<* popover>`   | `'showPopover'`       | Call `.showPopover()` on the invokee                                                 |
 | `<dialog>`      | `'auto'`              | If the `<dialog>` is not `open`, call `showModal()`, otherwise cancel the dialog     |
 | `<dialog>`      | `'toggleModal'`       | If the `<dialog>` is not `open`, call `showModal()`, otherwise cancel the dialog     |
+| `<dialog>`      | `'cancel'`            | If the `<dialog>` is `open`, cancel the dialog                                       |
 | `<dialog>`      | `'showModal'`         | If the `<dialog>` is not `open`, call `showModal()`                                  |
-| `<dialog>`      | `'close'`             | If the `<dialog>` is `open`, cancel the dialog                                       |
+| `<dialog>`      | `'close'`             | If the `<dialog>` is `open`, close and use the button `value` for returnValue        |
 | `<details>`     | `'auto'`              | If the `<details>` is `open`, then close it, otherwise open it                       |
 | `<details>`     | `'toggle'`            | If the `<details>` is `open`, then close it, otherwise open it                       |
 | `<details>`     | `'open'`              | If the `<details>` is not `open`, then open it                                       |
