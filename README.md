@@ -1,5 +1,11 @@
 # Invoker Buttons
 
+> [!WARNING]\
+> This document serves as the original archive of this explainer. The new and upated explainer
+> can be found at https://open-ui.org/components/invokers.explainer/.
+>
+> This document is here for posterity and does not represent the latest version of this proposal.
+
 ## Pitch in Code
 
 ```html
