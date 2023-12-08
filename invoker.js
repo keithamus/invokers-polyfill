@@ -11,30 +11,18 @@ const ShadowRoot = globalThis.ShadowRoot || function () {};
 class InvokeEvent extends Event {
   constructor(invokeEventInit = {}) {
     super("invoke", invokeEventInit);
-    this.#relatedTarget = invokeEventInit.relatedTarget || null;
-    this.#action = invokeEventInit.action || "auto";
+    this.#invoker = invokeEventInit.invoker || null;
+    this.#action = String(invokeEventInit.action) || "auto";
   }
 
-  #relatedTarget = null;
-  get relatedTarget() {
-    return this.#relatedTarget;
+  #invoker = null;
+  get invoker() {
+    return this.#invoker;
   }
 
   #action = "auto";
   get action() {
     return this.#action;
-  }
-}
-
-class InterestEvent extends Event {
-  constructor(type, interestEventInit = {}) {
-    super(type, interestEventInit);
-    this.#relatedTarget = interestEventInit.relatedTarget || null;
-  }
-
-  #relatedTarget = null;
-  get relatedTarget() {
-    return this.#relatedTarget;
   }
 }
 
@@ -59,9 +47,7 @@ function applyInvokerMixin(ElementClass) {
           invokerAssociatedElements.delete(this);
           teardownInvokeListeners(this);
         } else if (!(targetElement instanceof Element)) {
-          throw new TypeError(
-            `invokeTargetElement must be an element or null`,
-          );
+          throw new TypeError(`invokeTargetElement must be an element or null`);
         } else {
           this.setAttribute("invoketarget", "");
           invokerAssociatedElements.set(this, targetElement);
@@ -118,80 +104,18 @@ function applyInvokerMixin(ElementClass) {
   });
 }
 
-function applyInterestMixin(ElementClass) {
-  Object.defineProperties(ElementClass.prototype, {
-    interestTargetElement: {
-      enumerable: true,
-      configurable: true,
-      set(targetElement) {
-        if (targetElement === null) {
-          this.removeAttribute("interesttarget");
-          invokerAssociatedElements.delete(this);
-          teardownInterestListeners(this);
-        } else if (!(targetElement instanceof Element)) {
-          throw new TypeError(
-            `invokeTargetElement must be an element or null`,
-          );
-        } else {
-          this.setAttribute("interesttarget", "");
-          invokerAssociatedElements.set(this, targetElement);
-          setupInterestListeners(this);
-        }
-      },
-      get() {
-        if (
-          this.localName !== "button" &&
-          this.localName !== "a" &&
-          this.localName !== "input"
-        ) {
-          return null;
-        }
-        if (
-          this.localName === "input" &&
-          this.type !== "reset" &&
-          this.type !== "image" &&
-          this.type !== "button"
-        ) {
-          return null;
-        }
-        if (this.disabled) {
-          return null;
-        }
-        if (this.form && this.type === "submit") {
-          return null;
-        }
-        const targetElement = invokerAssociatedElements.get(this);
-        if (targetElement) {
-          if (targetElement.isConnected) {
-            return targetElement;
-          } else {
-            invokerAssociatedElements.delete(this);
-            return null;
-          }
-        }
-        const root = getRootNode(this);
-        const idref = this.getAttribute("interesttarget");
-        if ((root instanceof Document || root instanceof ShadowRoot) && idref) {
-          return root.getElementById(idref) || null;
-        }
-        return null;
-      },
-    },
-  });
-}
-
 function handleInvokerActivation(event) {
   if (!event.isTrusted) return;
   if (event.defaultPrevented) return;
-  const relatedTarget = event.target;
+  const invoker = event.target;
 
-  if (!relatedTarget.invokeTargetElement) {
-    return teardownInvokeListeners(relatedTarget);
+  if (!invoker.invokeTargetElement) {
+    return teardownInvokeListeners(invoker);
   }
 
   switch (event.type) {
     case "click": {
-      return handleDefaultInvoke(relatedTarget);
+      return handleDefaultInvoke(invoker);
     }
   }
 }
@@ -201,7 +125,7 @@ function handleDefaultInvoke(invoker) {
   const invokee = invoker.invokeTargetElement;
   const event = new InvokeEvent({
     action: invoker.invokerAction,
-    relatedTarget: invoker,
+    invoker,
   });
   invokee.dispatchEvent(event);
   if (event.defaultPrevented) return;
@@ -320,71 +244,12 @@ function handleDefaultInvoke(invoker) {
   }
 }
 
-function handleInterestActivation(event) {
-  if (!event.isTrusted) return;
-  if (event.defaultPrevented) return;
-  const relatedTarget = event.target;
-
-  if (!relatedTarget.interestTargetElement) {
-    return teardownInterestListeners(relatedTarget);
-  }
-
-  switch (event.type) {
-    case "focusin":
-    case "pointerover": {
-      return handleDefaultGainInterest(relatedTarget);
-    }
-    case "focusout":
-    case "pointerout": {
-      return handleDefaultLoseInterest(relatedTarget);
-    }
-  }
-}
-
-function handleDefaultGainInterest(invoker) {
-  const invokee = invoker.interestTargetElement;
-  console.log(" interest", invoker, invokee);
-  const event = new InterestEvent("interest", { relatedTarget: invoker });
-  invokee.dispatchEvent(event);
-  if (event.defaultPrevented) return;
-
-  if (invokee.popover && !event.target.matches(":popover-open")) {
-    invokee.showPopover();
-  }
-}
-
-function handleDefaultLoseInterest(invoker) {
-  const invokee = invoker.interestTargetElement;
-  console.log("lose interest", invoker, invokee);
-  const event = new InterestEvent("loseinterest", { relatedTarget: invoker });
-  invokee.dispatchEvent(event);
-  if (event.defaultPrevented) return;
-
-  if (invokee.popover && event.target.matches(":popover-open")) {
-    invokee.hidePopover();
-  }
-}
-
 function setupInvokeListeners(target) {
   target.addEventListener("click", handleInvokerActivation);
 }
 
-function setupInterestListeners(target) {
-  target.addEventListener("pointerover", handleInterestActivation);
-  target.addEventListener("pointerout", handleInterestActivation);
-  target.addEventListener("focusin", handleInterestActivation);
-  target.addEventListener("focusout", handleInterestActivation);
-}
-
 function teardownInvokeListeners(target) {
   target.removeEventListener("click", handleInvokerActivation);
-}
-
-function teardownInterestListeners(target) {
-  target.removeEventListener("pointerover", handleInterestActivation);
-  target.removeEventListener("pointerout", handleInterestActivation);
-  target.removeEventListener("focusin", handleInterestActivation);
-  target.removeEventListener("focusout", handleInterestActivation);
 }
 
 function observeShadowRoots(ElementClass, callback) {
@@ -393,6 +258,12 @@ function observeShadowRoots(ElementClass, callback) {
     const shadow = attachShadow.call(this, init);
     callback(shadow);
     return shadow;
+  };
+  const attachInternals = ElementClass.prototype.attachInternals;
+  ElementClass.prototype.attachInternals = function () {
+    const internals = attachInternals.call(this);
+    if (internals.shadowRoot) callback(internals.shadowRoot);
+    return internals;
   };
 }
 
@@ -405,11 +276,6 @@ export function apply() {
           mutation.target.invokeTargetElement
         ) {
           setupInvokeListeners(mutation.target);
-        } else if (
-          mutation.attributeName === "interesttarget" &&
-          mutation.target.interestTargetElement
-        ) {
-          setupInterestListeners(mutation.target);
         }
       }
     }
@@ -418,16 +284,12 @@ export function apply() {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ["invoketarget", "interesttarget"],
+    attributeFilter: ["invoketarget"],
   };
   observer.observe(document, observerOptions);
 
   applyInvokerMixin(globalThis.HTMLButtonElement || function () {});
   applyInvokerMixin(globalThis.HTMLInputElement || function () {});
-
-  applyInterestMixin(globalThis.HTMLButtonElement || function () {});
-  applyInterestMixin(globalThis.HTMLInputElement || function () {});
-  applyInterestMixin(globalThis.HTMLAnchorElement || function () {});
 
   observeShadowRoots(globalThis.HTMLElement || function () {}, (shadow) => {
     observer.observe(shadow, observerOptions);
@@ -435,8 +297,5 @@ export function apply() {
 
   for (const invoker of document.querySelectorAll("[invoketarget]")) {
     setupInvokeListeners(invoker);
-  }
-  for (const invoker of document.querySelectorAll("[interesttarget]")) {
-    setupInterestListeners(invoker);
   }
 }

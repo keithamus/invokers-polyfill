@@ -1,0 +1,13 @@
+{
+  "name": "invokers-polyfill",
+  "version": "1.0.0",
+  "description": "This polyfills the HTML `invoketarget`/`invokeaction` and `interesttarget` attributes, as proposed by the Open UI group.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Keith Cirkel (https://keithcirkel.co.uk)",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {}
+}
