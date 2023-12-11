@@ -1,13 +1,12 @@
 {
   "name": "invokers-polyfill",
   "version": "1.0.0",
-  "description": "This polyfills the HTML `invoketarget`/`invokeaction` and `interesttarget` attributes, as proposed by the Open UI group.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Keith Cirkel (https://keithcirkel.co.uk)",
+  "description": "This polyfills the HTML `invoketarget`/`invokeaction`, as proposed by the Open UI group.",
   "license": "MIT",
+  "author": "Keith Cirkel (https://keithcirkel.co.uk)",
   "type": "module",
-  "scripts": {}
+  "main": "invoker.js",
+  "scripts": {
+    "test": "echo TODO! Run ./wpt serve --inject-script=../invoker-buttons/invoker.js for now."
+  }
 }

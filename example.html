@@ -1,20 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <title>Invoker Buttons Example</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link
     rel="stylesheet"
-    href="https://unpkg.com/@oddbird/popover-polyfill@0.2.3/dist/popover.css"
+    href="https://unpkg.com/@oddbird/popover-polyfill@0.3.7/dist/popover.css"
   />
   <script
     type="module"
     async
-    src="https://unpkg.com/@oddbird/popover-polyfill@0.2.3/dist/popover.js"
+    src="https://unpkg.com/@oddbird/popover-polyfill@0.3.7/dist/popover.js"
   ></script>
-  <script type="module">
-    import { isSupported, apply } from "./invoker.js";
-    if (!isSupported()) apply();
-  </script>
+  <script type="module" src="./invoker.js"></script>
   <body>
     <h1>InvokeTarget &amp; InvokeAction</h1>
     <p>
@@ -23,43 +20,20 @@
         >github:keithamus/invoker-buttons-proposal</a
       >.
     </p>
-    <p>
-      This page is running a "polyfill" for the spec, but hopefully in the
-      future all of the below will work without any JavaScript!
-    </p>
     <hr />
-    <button invoketarget="my-file-input">
-      This will open the file picker
-    </button>
-    <input type="file" id="my-file-input" />
-    <hr />
-    <button invoketarget="my-date-input" invokeaction="showPicker">
-      This should open the date picker
-    </button>
-    <input type="date" id="my-date-input" />
-    <hr />
-
-    <button invoketarget="my-details" interesttarget="button-explainer">
-      This will open the details
-    </button>
-
-    <details id="my-details">
-      <summary>This is a details</summary>
-      This is the details
-    </details>
-
-    <div popover id="button-explainer">
-      This button will open the details element
-    </div>
-
-    <hr />
-
+    <h2>Initial Actions</h2>
     <button invoketarget="my-dialog" interesttarget="dialog-explainer">
       This will open the dialog
     </button>
 
     <dialog id="my-dialog">
-      <button invoketarget="my-dialog" invokeaction="close" aria-label="Close dialog">x</button>
+      <button
+        invoketarget="my-dialog"
+        invokeaction="close"
+        aria-label="Close dialog"
+      >
+        x
+      </button>
       This is a dialog. Press the Close button (X) to close it
     </dialog>
 
@@ -68,74 +42,117 @@
     </div>
 
     <hr />
-    <button invoketarget="my-select" interesttarget="select-explainer">
-      This will open the select
-    </button>
-    <select id="my-select">
-      <option>Option 1</option>
-      <option>Option 2</option>
-    </select>
 
-    <div popover id="select-explainer">
-      This button will open the select element, in browsers that support <code>select.showPicker()</code>
+    <button invoketarget="my-popover-1">Opens a popover</button>
+
+    <button invoketarget="my-popover-1" invokeaction="togglePopover">
+      Toggles a popover
+    </button>
+
+    <div popover id="my-popover-1">
+      <button invoketarget="my-popover-1" invokeaction="hidePopover">X</button>
+      This is a popover
     </div>
     <hr />
-    <button
-      invoketarget="my-video"
-      interesttarget="my-video-playpause-explainer"
-    >
-      Play/pause
-    </button>
-    <div popover id="my-video-playpause-explainer">
-      This button will cause the video to play or pause depending on the current
-      state
-    </div>
-    <button
-      invoketarget="my-video"
-      invokeaction="play"
-      interesttarget="my-video-play-explainer"
-    >
-      Play
-    </button>
-    <div popover id="my-video-play-explainer">
-      This button will cause the video to play if it isn't already
-    </div>
-    <button
-      invoketarget="my-video"
-      invokeaction="pause"
-      interesttarget="my-video-pause-explainer"
-    >
-      Pause
-    </button>
-    <div popover id="my-video-pause-explainer">
-      This button will cause the video to pause if it isn't already
-    </div>
-    <button
-      invoketarget="my-video"
-      invokeaction="mute"
-      interesttarget="my-video-mute-explainer"
-    >
-      Mute
-    </button>
-    <div popover id="my-video-mute-explainer">
-      This button will cause the video mute or unmute depending on the current
-      state
-    </div>
-    <button
-      invoketarget="my-video"
-      invokeaction="requestfullscreen"
-      interesttarget="my-video-fullscreen-explainer"
-    >
-      Fullscreen
-    </button>
-    <div popover id="my-video-fullscreen-explainer">
-      This button will cause the video to go into fullscreen
-    </div>
-    <video id="my-video" width="100%" controls>
-      <source
-        src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        type="video/mp4"
-      />
-    </video>
+
+    <details>
+      <summary>Future Actions</summary>
+      <button invoketarget="my-file-input">
+        This will open the file picker
+      </button>
+      <input type="file" id="my-file-input" />
+      <hr />
+      <button invoketarget="my-date-input" invokeaction="showPicker">
+        This should open the date picker
+      </button>
+      <input type="date" id="my-date-input" />
+      <hr />
+
+      <button invoketarget="my-details" interesttarget="button-explainer">
+        This will open the details
+      </button>
+
+      <details id="my-details">
+        <summary>This is a details</summary>
+        This is the details
+      </details>
+
+      <div popover id="button-explainer">
+        This button will open the details element
+      </div>
+
+      <hr />
+
+      <button invoketarget="my-select" interesttarget="select-explainer">
+        This will open the select
+      </button>
+      <select id="my-select">
+        <option>Option 1</option>
+        <option>Option 2</option>
+      </select>
+
+      <div popover id="select-explainer">
+        This button will open the select element, in browsers that support
+        <code>select.showPicker()</code>
+      </div>
+      <hr />
+      <button
+        invoketarget="my-video"
+        interesttarget="my-video-playpause-explainer"
+      >
+        Play/pause
+      </button>
+      <div popover id="my-video-playpause-explainer">
+        This button will cause the video to play or pause depending on the
+        current state
+      </div>
+      <button
+        invoketarget="my-video"
+        invokeaction="play"
+        interesttarget="my-video-play-explainer"
+      >
+        Play
+      </button>
+      <div popover id="my-video-play-explainer">
+        This button will cause the video to play if it isn't already
+      </div>
+      <button
+        invoketarget="my-video"
+        invokeaction="pause"
+        interesttarget="my-video-pause-explainer"
+      >
+        Pause
+      </button>
+      <div popover id="my-video-pause-explainer">
+        This button will cause the video to pause if it isn't already
+      </div>
+      <button
+        invoketarget="my-video"
+        invokeaction="mute"
+        interesttarget="my-video-mute-explainer"
+      >
+        Mute
+      </button>
+      <div popover id="my-video-mute-explainer">
+        This button will cause the video mute or unmute depending on the current
+        state
+      </div>
+      <button
+        invoketarget="my-video"
+        invokeaction="requestfullscreen"
+        interesttarget="my-video-fullscreen-explainer"
+      >
+        Fullscreen
+      </button>
+      <div popover id="my-video-fullscreen-explainer">
+        This button will cause the video to go into fullscreen
+      </div>
+      <video id="my-video" width="100%" controls>
+        <source
+          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+          type="video/mp4"
+        />
+      </video>
+    </details>
   </body>
 </html>
