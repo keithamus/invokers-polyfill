@@ -164,7 +164,7 @@
     if (event.type === "click") {
       const invokee = invoker.invokeTargetElement;
       const event = new InvokeEvent("invoke", {
-        action: invoker.invokerAction,
+        action: invoker.invokeAction,
         invoker,
       });
       invokee.dispatchEvent(event);
