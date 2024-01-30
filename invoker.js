@@ -7,6 +7,15 @@
     return;
   }
 
+  // XXX: https://bugs.chromium.org/p/chromium/issues/detail?id=1523183
+  // Chrome will dispatch invoke events even with the flag disabled; so
+  // we need to capture those to prevent duplicate events.
+  document.addEventListener('invoke', (e) => {
+    if (e.type == 'invoke' && e.isTrusted) {
+      e.stopImmediatePropagation();
+    }
+  }, true);
+
   function makeEnumerable(obj, key) {
     Object.defineProperty(obj, key, {
       ...Object.getOwnPropertyDescriptor(obj, key),
