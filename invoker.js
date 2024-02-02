@@ -88,7 +88,6 @@
           if (targetElement === null) {
             this.removeAttribute("invoketarget");
             invokerAssociatedElements.delete(this);
-            teardownInvokeListeners(this);
           } else if (!(targetElement instanceof Element)) {
             throw new TypeError(
               `invokeTargetElement must be an element or null`,
@@ -102,10 +101,8 @@
               targetRootNode === this.ownerDocument
             ) {
               invokerAssociatedElements.set(this, targetElement);
-              setupInvokeListeners(this);
             } else {
               invokerAssociatedElements.delete(this);
-              teardownInvokeListeners(this);
             }
           }
         },
@@ -164,60 +161,52 @@
 
   function handleInvokerActivation(event) {
     if (event.defaultPrevented) return;
-    const invoker = event.target;
+    if (event.type !== 'click') return;
+    const invoker = event.target.closest('button[invoketarget], input[invoketarget]')
+    if (!invoker) return
 
-    if (!invoker.invokeTargetElement) {
-      return teardownInvokeListeners(invoker);
-    }
+    const invokee = invoker.invokeTargetElement;
+    const invokeEvent = new InvokeEvent("invoke", {
+      action: invoker.invokeAction,
+      invoker,
+    });
+    invokee.dispatchEvent(invokeEvent);
+    if (invokeEvent.defaultPrevented) return;
 
-    if (event.type === "click") {
-      const invokee = invoker.invokeTargetElement;
-      const event = new InvokeEvent("invoke", {
-        action: invoker.invokeAction,
-        invoker,
-      });
-      invokee.dispatchEvent(event);
-      if (event.defaultPrevented) return;
+    const action = invokeEvent.action.toLowerCase();
 
-      const action = event.action.toLowerCase();
-
-      if (invokee.popover) {
-        const canShow = !invokee.matches(":popover-open");
-        const shouldShow =
-          canShow &&
+    if (invokee.popover) {
+      const canShow = !invokee.matches(":popover-open");
+      const shouldShow =
+        canShow &&
           (action === "auto" ||
             action === "togglepopover" ||
             action === "showpopover");
-        const shouldHide =
-          !canShow && (action === "auto" || action === "hidepopover");
+      const shouldHide =
+        !canShow && (action === "auto" || action === "hidepopover");
 
-        if (shouldShow) {
-          invokee.showPopover();
-        } else if (shouldHide) {
-          invokee.hidePopover();
-        }
-      } else if (invokee.localName === "dialog") {
-        const canShow = !invokee.hasAttribute("open");
-        const shouldShow =
-          canShow && (action === "auto" || action === "showmodal");
-        const shouldHide =
-          !canShow && (action === "auto" || action === "close");
+      if (shouldShow) {
+        invokee.showPopover();
+      } else if (shouldHide) {
+        invokee.hidePopover();
+      }
+    } else if (invokee.localName === "dialog") {
+      const canShow = !invokee.hasAttribute("open");
+      const shouldShow =
+        canShow && (action === "auto" || action === "showmodal");
+      const shouldHide =
+        !canShow && (action === "auto" || action === "close");
 
-        if (shouldShow) {
-          invokee.showModal();
-        } else if (shouldHide) {
-          invokee.close();
-        }
+      if (shouldShow) {
+        invokee.showModal();
+      } else if (shouldHide) {
+        invokee.close();
       }
     }
   }
 
   function setupInvokeListeners(target) {
-    target.addEventListener("click", handleInvokerActivation);
-  }
-
-  function teardownInvokeListeners(target) {
-    target.removeEventListener("click", handleInvokerActivation);
+    target.addEventListener("click", handleInvokerActivation, true);
   }
 
   function observeShadowRoots(ElementClass, callback) {
@@ -235,36 +224,14 @@
     };
   }
 
-  const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      if (mutation.type === "attributes") {
-        if (
-          mutation.attributeName === "invoketarget" &&
-          mutation.target.invokeTargetElement
-        ) {
-          setupInvokeListeners(mutation.target);
-        }
-      }
-    }
-  });
-  const observerOptions = {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ["invoketarget"],
-  };
-  observer.observe(document, observerOptions);
-
   applyInvokerMixin(globalThis.HTMLButtonElement || function () {});
   applyInvokerMixin(globalThis.HTMLInputElement || function () {});
 
   observeShadowRoots(globalThis.HTMLElement || function () {}, (shadow) => {
-    observer.observe(shadow, observerOptions);
+    setupInvokeListeners(shadow);
   });
 
-  for (const invoker of document.querySelectorAll("[invoketarget]")) {
-    setupInvokeListeners(invoker);
-  }
+  setupInvokeListeners(document.body);
 
   Object.defineProperty(window, "InvokeEvent", {
     value: InvokeEvent,
