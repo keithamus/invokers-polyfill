@@ -8,9 +8,14 @@
   "main": "invoker.js",
   "types": "invoker.d.ts",
   "files": [
-    "invoker.d.ts"
+    "invoker.d.ts",
+    "invoker.min.js"
   ],
   "scripts": {
+    "minify": "esbuild --minify invoker.js > invoker.min.js",
     "test": "echo TODO! Run ./wpt serve --inject-script=../invoker-buttons/invoker.js for now."
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
   }
 }

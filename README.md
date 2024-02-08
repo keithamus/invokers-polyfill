@@ -18,7 +18,7 @@ Alternatively, if you're not using a package manager, you can use the `unpkg` sc
 <script
   type="module"
   async
-  src="https://unpkg.com/invokers-polyfill@0.1.0/invoker.js"
+  src="https://unpkg.com/invokers-polyfill@latest/invoker.min.js"
 ></script>
 ```
 
