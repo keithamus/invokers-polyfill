@@ -7,6 +7,9 @@
   "type": "module",
   "main": "invoker.js",
   "types": "invoker.d.ts",
+  "files": [
+    "invoker.d.ts"
+  ],
   "scripts": {
     "test": "echo TODO! Run ./wpt serve --inject-script=../invoker-buttons/invoker.js for now."
   }
