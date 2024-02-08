@@ -231,7 +231,7 @@
     setupInvokeListeners(shadow);
   });
 
-  setupInvokeListeners(document.body);
+  setupInvokeListeners(document);
 
   Object.defineProperty(window, "InvokeEvent", {
     value: InvokeEvent,
