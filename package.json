@@ -7,6 +7,10 @@
   "type": "module",
   "main": "invoker.js",
   "types": "invoker.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/keithamus/invokers-polyfill"
+  },
   "files": [
     "invoker.d.ts",
     "invoker.min.js"
