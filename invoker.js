@@ -46,7 +46,7 @@
       invokeEventInvokers.set(this, invoker || null);
       invokeEventActions.set(
         this,
-        action !== undefined ? String(action) : "auto",
+        action !== undefined ? String(action) : "",
       );
     }
 
@@ -150,7 +150,7 @@
         get() {
           const value = this.getAttribute("invokeaction") || "";
           if (value) return value;
-          return "auto";
+          return "";
         },
         set(value) {
           this.setAttribute("invokeaction", value);
@@ -179,11 +179,11 @@
       const canShow = !invokee.matches(":popover-open");
       const shouldShow =
         canShow &&
-          (action === "auto" ||
+          (action === "" ||
             action === "togglepopover" ||
             action === "showpopover");
       const shouldHide =
-        !canShow && (action === "auto" || action === "hidepopover");
+        !canShow && (action === "" || action === "hidepopover");
 
       if (shouldShow) {
         invokee.showPopover();
@@ -193,9 +193,9 @@
     } else if (invokee.localName === "dialog") {
       const canShow = !invokee.hasAttribute("open");
       const shouldShow =
-        canShow && (action === "auto" || action === "showmodal");
+        canShow && (action === "" || action === "showmodal");
       const shouldHide =
-        !canShow && (action === "auto" || action === "close");
+        !canShow && (action === "" || action === "close");
 
       if (shouldShow) {
         invokee.showModal();
