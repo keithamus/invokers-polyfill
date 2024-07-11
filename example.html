@@ -13,23 +13,25 @@
   ></script>
   <script type="module" src="./invoker.js"></script>
   <body>
-    <h1>InvokeTarget &amp; InvokeAction</h1>
+    <h1>commandfor &amp; command attributes</h1>
     <p>
       This is a demonstration page for the
       <a href="https://github.com/keithamus/invokers-polyfill"
         >github:keithamus/invokers-polyfill</a
-      >.
+      >, which polyfills the <a href="https://open-ui.org/components/invokers.explainer/">
+        Invoker Buttons proposal
+      </a>
     </p>
     <hr />
     <h2>Initial Actions</h2>
-    <button invoketarget="my-dialog" interesttarget="dialog-explainer">
+    <button commandfor="my-dialog" command="showModal" interesttarget="dialog-explainer">
       This will open the dialog
     </button>
 
     <dialog id="my-dialog">
       <button
-        invoketarget="my-dialog"
-        invokeaction="close"
+        commandfor="my-dialog"
+        command="close"
         aria-label="Close dialog"
       >
         x
@@ -43,32 +45,30 @@
 
     <hr />
 
-    <button invoketarget="my-popover-1">Opens a popover</button>
-
-    <button invoketarget="my-popover-1" invokeaction="togglePopover">
+    <button commandfor="my-popover-1" command="togglePopover">
       Toggles a popover
     </button>
 
     <div popover id="my-popover-1">
-      <button invoketarget="my-popover-1" invokeaction="hidePopover">X</button>
+      <button commandfor="my-popover-1" command="hidePopover">X</button>
       This is a popover
     </div>
     <hr />
 
     <details>
       <summary>Future Actions</summary>
-      <button invoketarget="my-file-input" invokeaction="showPicker">
+      <button commandfor="my-file-input" command="showPicker">
         This will open the file picker
       </button>
       <input type="file" id="my-file-input" />
       <hr />
-      <button invoketarget="my-date-input" invokeaction="showPicker">
+      <button commandfor="my-date-input" command="showPicker">
         This should open the date picker
       </button>
       <input type="date" id="my-date-input" />
       <hr />
 
-      <button invoketarget="my-details" interesttarget="button-explainer">
+      <button commandfor="my-details" command="open" interesttarget="button-explainer">
         This will open the details
       </button>
 
@@ -83,7 +83,7 @@
 
       <hr />
 
-      <button invoketarget="my-select" invokeaction="showPicker" interesttarget="select-explainer">
+      <button commandfor="my-select" command="showPicker" interesttarget="select-explainer">
         This will open the select
       </button>
       <select id="my-select">
@@ -97,7 +97,8 @@
       </div>
       <hr />
       <button
-        invoketarget="my-video"
+        commandfor="my-video"
+        command="playpause"
         interesttarget="my-video-playpause-explainer"
       >
         Play/pause
@@ -107,8 +108,8 @@
         current state
       </div>
       <button
-        invoketarget="my-video"
-        invokeaction="play"
+        commandfor="my-video"
+        command="play"
         interesttarget="my-video-play-explainer"
       >
         Play
@@ -117,8 +118,8 @@
         This button will cause the video to play if it isn't already
       </div>
       <button
-        invoketarget="my-video"
-        invokeaction="pause"
+        commandfor="my-video"
+        command="pause"
         interesttarget="my-video-pause-explainer"
       >
         Pause
@@ -127,8 +128,8 @@
         This button will cause the video to pause if it isn't already
       </div>
       <button
-        invoketarget="my-video"
-        invokeaction="mute"
+        commandfor="my-video"
+        command="mute"
         interesttarget="my-video-mute-explainer"
       >
         Mute
@@ -138,8 +139,8 @@
         state
       </div>
       <button
-        invoketarget="my-video"
-        invokeaction="requestfullscreen"
+        commandfor="my-video"
+        command="requestfullscreen"
         interesttarget="my-video-fullscreen-explainer"
       >
         Fullscreen
