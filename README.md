@@ -25,6 +25,6 @@ Alternatively, if you're not using a package manager, you can use the `unpkg` sc
 With the module imported, you can add `commandfor` and `command` attributes to your HTML:
 
 ```html
-<button commandfor="my-dialog" command="showModal">Open Dialog!</button>
+<button commandfor="my-dialog" command="show-modal">Open Dialog!</button>
 <dialog id="my-dialog">I'm a dialog!</dialog>
 ```
