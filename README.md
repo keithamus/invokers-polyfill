@@ -1,6 +1,6 @@
 # Invoker Buttons Polyfill
 
-This polyfills the HTML `invoketarget`/`invokeaction` attributes, as proposed by the Open UI group.
+This polyfills the HTML `commandfor`/`command` attributes, as proposed by the Open UI group.
 
 To see the explainer of these, please visit https://open-ui.org/components/invokers.explainer/.
 
@@ -22,9 +22,9 @@ Alternatively, if you're not using a package manager, you can use the `unpkg` sc
 ></script>
 ```
 
-With the module imported, you can add `invoketarget` and `invokeaction` attributes to your HTML:
+With the module imported, you can add `commandfor` and `command` attributes to your HTML:
 
 ```html
-<button invoketarget="my-dialog">Open Dialog!</button>
+<button commandfor="my-dialog" command="show-modal">Open Dialog!</button>
 <dialog id="my-dialog">I'm a dialog!</dialog>
 ```
