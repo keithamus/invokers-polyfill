@@ -123,11 +123,11 @@
         set(targetElement) {
           if (this.hasAttribute("invokeaction")) {
             throw new TypeError(
-              "Element has deprecated `invokeaction` attribute",
+              "Element has deprecated `invokeaction` attribute, replace with `command`",
             );
           } else if (this.hasAttribute("invoketarget")) {
             throw new TypeError(
-              "Element has deprecated `invoketarget` attribute",
+              "Element has deprecated `invoketarget` attribute, replace with `commandfor`",
             );
           } else if (targetElement === null) {
             this.removeAttribute("commandfor");
@@ -157,7 +157,7 @@
             this.hasAttribute("invoketarget")
           ) {
             console.warn(
-              "Element has deprecated `invoketarget` or `invokeaction` attribute",
+              "Element has deprecated `invoketarget` or `invokeaction` attribute, use `commandfor` and `command` instead",
             );
             return null;
           }
