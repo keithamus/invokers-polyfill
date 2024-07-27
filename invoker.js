@@ -149,7 +149,7 @@
           }
         },
         get() {
-          if (this.localName !== "button" && this.localName !== "input") {
+          if (this.localName !== "button") {
             return null;
           }
           if (
@@ -159,14 +159,6 @@
             console.warn(
               "Element has deprecated `invoketarget` or `invokeaction` attribute, use `commandfor` and `command` instead",
             );
-            return null;
-          }
-          if (
-            this.localName === "input" &&
-            this.type !== "reset" &&
-            this.type !== "image" &&
-            this.type !== "button"
-          ) {
             return null;
           }
           if (this.disabled) {
@@ -346,7 +338,6 @@
   }
 
   applyInvokerMixin(globalThis.HTMLButtonElement || function () {});
-  applyInvokerMixin(globalThis.HTMLInputElement || function () {});
 
   observeShadowRoots(globalThis.HTMLElement || function () {}, (shadow) => {
     setupInvokeListeners(shadow);
