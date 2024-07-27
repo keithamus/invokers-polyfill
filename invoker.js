@@ -49,45 +49,60 @@
 
   const ShadowRoot = globalThis.ShadowRoot || function () {};
 
-  const invokeEventInvokers = new WeakMap();
-  const invokeEventActions = new WeakMap();
+  const commandEventSourceElements = new WeakMap();
+  const commandEventActions = new WeakMap();
 
   class CommandEvent extends Event {
     constructor(type, invokeEventInit = {}) {
       super(type, invokeEventInit);
-      const { invoker, command } = invokeEventInit;
-      if (invoker != null && !(invoker instanceof Element)) {
-        throw new TypeError(`invoker must be an element`);
+      const { source, command } = invokeEventInit;
+      if (source != null && !(source instanceof Element)) {
+        throw new TypeError(`source must be an element`);
       }
-      invokeEventInvokers.set(this, invoker || null);
-      invokeEventActions.set(this, command !== undefined ? String(command) : "");
+      commandEventSourceElements.set(this, source || null);
+      commandEventActions.set(
+        this,
+        command !== undefined ? String(command) : "",
+      );
     }
 
     get [Symbol.toStringTag]() {
       return "CommandEvent";
     }
 
-    get invoker() {
-      if (!invokeEventInvokers.has(this)) {
+    get source() {
+      if (!commandEventSourceElements.has(this)) {
         throw new TypeError("illegal invocation");
       }
-      const invoker = invokeEventInvokers.get(this);
-      if (!(invoker instanceof Element)) return null;
-      const invokerRoot = getRootNode(invoker);
+      const source = commandEventSourceElements.get(this);
+      if (!(source instanceof Element)) return null;
+      const invokerRoot = getRootNode(source);
       if (invokerRoot !== getRootNode(this.target || document)) {
         return invokerRoot.host;
       }
-      return invoker;
+      return source;
     }
 
     get command() {
-      if (!invokeEventActions.has(this)) {
+      if (!commandEventActions.has(this)) {
         throw new TypeError("illegal invocation");
       }
-      return invokeEventActions.get(this);
+      return commandEventActions.get(this);
+    }
+
+    get action() {
+      throw new Error(
+        "CommandEvent#action was renamed to CommandEvent#command",
+      );
+    }
+
+    get source() {
+      throw new Error(
+        "CommandEvent#invoker was renamed to CommandEvent#source",
+      );
     }
   }
-  enumerate(CommandEvent.prototype, "invoker");
+  enumerate(CommandEvent.prototype, "source");
   enumerate(CommandEvent.prototype, "command");
 
   class InvokeEvent extends Event {
@@ -241,10 +256,10 @@
       );
     }
 
-    const invoker = event.target.closest(
+    const source = event.target.closest(
       "button[commandfor], button[command], input[commandfor], input[command]",
     );
-    if (!invoker) return;
+    if (!source) return;
 
     if (this.form && this.getAttribute("type") !== "button") {
       event.preventDefault();
@@ -255,22 +270,32 @@
       );
     }
 
-    if (
-      invoker.hasAttribute("command") !== invoker.hasAttribute("commandfor")
-    ) {
-      const attr = invoker.hasAttribute("command") ? "command" : "commandfor";
-      const missing = invoker.hasAttribute("command")
-        ? "commandfor"
-        : "command";
+    if (source.hasAttribute("command") !== source.hasAttribute("commandfor")) {
+      const attr = source.hasAttribute("command") ? "command" : "commandfor";
+      const missing = source.hasAttribute("command") ? "commandfor" : "command";
       throw new Error(
         `Element with ${attr} attribute must also have a ${missing} attribute to functon.`,
       );
     }
 
-    const invokee = invoker.commandForElement;
+    if (
+      source.command !== "show-popover" &&
+      source.command !== "hide-popover" &&
+      source.command !== "toggle-popover" &&
+      source.command !== "show-modal" &&
+      source.command !== "close" &&
+      !source.command.startsWith("--")
+    ) {
+      console.warn(
+        `"${source.command}" is not a valid command value. Custom commands must begin with --`,
+      );
+      return;
+    }
+
+    const invokee = source.commandForElement;
     const invokeEvent = new CommandEvent("command", {
-      command: invoker.command,
-      invoker,
+      command: source.command,
+      source,
     });
     invokee.dispatchEvent(invokeEvent);
     if (invokeEvent.defaultPrevented) return;

@@ -5,7 +5,7 @@ interface InvokerMixin {
 
 declare global {
   interface CommandEvent extends Event {
-    invoker: Element;
+    source: Element;
     command: string;
   }
   /* eslint-disable @typescript-eslint/no-empty-interface */
