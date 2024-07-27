@@ -297,8 +297,8 @@
     if (invokee.popover) {
       const canShow = !invokee.matches(":popover-open");
       const shouldShow =
-        canShow && (command === "togglepopover" || command === "showpopover");
-      const shouldHide = !canShow && command === "hidepopover";
+        canShow && (command === "toggle-popover" || command === "show-popover");
+      const shouldHide = !canShow && command === "hide-popover";
 
       if (shouldShow) {
         invokee.showPopover();
@@ -307,7 +307,7 @@
       }
     } else if (invokee.localName === "dialog") {
       const canShow = !invokee.hasAttribute("open");
-      const shouldShow = canShow && command === "showmodal";
+      const shouldShow = canShow && command === "show-modal";
       const shouldHide = !canShow && command === "close";
 
       if (shouldShow) {
