@@ -21,7 +21,7 @@ jobs:
       - run: npm install -g npm@latest
       - run: npm i
       - run: npm test
-      - run: npm minify
+      - run: npm run minify
       - run: npm version ${TAG_NAME} --git-tag-version=false
         env:
           TAG_NAME: ${{ github.event.release.tag_name }}
