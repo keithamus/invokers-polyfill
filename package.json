@@ -1,6 +1,6 @@
 {
   "name": "invokers-polyfill",
-  "version": "0.2.1",
+  "version": "0.0.0-development",
   "description": "This polyfills the HTML `invoketarget`/`invokeaction`, as proposed by the Open UI group.",
   "license": "MIT",
   "author": "Keith Cirkel (https://keithcirkel.co.uk)",
