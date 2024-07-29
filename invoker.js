@@ -96,7 +96,7 @@
       );
     }
 
-    get source() {
+    get invoker() {
       throw new Error(
         "CommandEvent#invoker was renamed to CommandEvent#source",
       );
