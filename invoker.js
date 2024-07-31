@@ -25,7 +25,7 @@
   document.addEventListener(
     "command",
     (e) => {
-      if (e.type == "invoke" && e.isTrusted) {
+      if (e.type == "command" && e.isTrusted) {
         e.stopImmediatePropagation();
       }
     },
@@ -266,7 +266,7 @@
       const attr = source.hasAttribute("command") ? "command" : "commandfor";
       const missing = source.hasAttribute("command") ? "commandfor" : "command";
       throw new Error(
-        `Element with ${attr} attribute must also have a ${missing} attribute to functon.`,
+        `Element with ${attr} attribute must also have a ${missing} attribute to function.`,
       );
     }
 
