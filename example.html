@@ -24,7 +24,7 @@
     </p>
     <hr />
     <h2>Initial Actions</h2>
-    <button commandfor="my-dialog" command="showModal" interesttarget="dialog-explainer">
+    <button commandfor="my-dialog" command="show-modal" interesttarget="dialog-explainer">
       This will open the dialog
     </button>
 
@@ -45,24 +45,24 @@
 
     <hr />
 
-    <button commandfor="my-popover-1" command="togglePopover">
+    <button commandfor="my-popover-1" command="toggle-popover">
       Toggles a popover
     </button>
 
     <div popover id="my-popover-1">
-      <button commandfor="my-popover-1" command="hidePopover">X</button>
+      <button commandfor="my-popover-1" command="hide-popover">X</button>
       This is a popover
     </div>
     <hr />
 
     <details>
       <summary>Future Actions</summary>
-      <button commandfor="my-file-input" command="showPicker">
+      <button commandfor="my-file-input" command="show-picker">
         This will open the file picker
       </button>
       <input type="file" id="my-file-input" />
       <hr />
-      <button commandfor="my-date-input" command="showPicker">
+      <button commandfor="my-date-input" command="show-picker">
         This should open the date picker
       </button>
       <input type="date" id="my-date-input" />
@@ -83,7 +83,7 @@
 
       <hr />
 
-      <button commandfor="my-select" command="showPicker" interesttarget="select-explainer">
+      <button commandfor="my-select" command="show-picker" interesttarget="select-explainer">
         This will open the select
       </button>
       <select id="my-select">
@@ -98,7 +98,7 @@
       <hr />
       <button
         commandfor="my-video"
-        command="playpause"
+        command="play-pause"
         interesttarget="my-video-playpause-explainer"
       >
         Play/pause
