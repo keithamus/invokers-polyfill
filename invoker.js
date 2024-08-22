@@ -1,8 +1,7 @@
 (() => {
   if (
     typeof HTMLButtonElement === "undefined" ||
-    typeof HTMLButtonElement.prototype !== "object" ||
-    "commandForElement" in HTMLButtonElement.prototype
+    "source" in ((globalThis.CommandEvent || {}).prototype || {})
   ) {
     return;
   }
