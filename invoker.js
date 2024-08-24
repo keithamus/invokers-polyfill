@@ -17,6 +17,7 @@
     (e) => {
       if (e.type == "invoke" && e.isTrusted) {
         e.stopImmediatePropagation();
+        e.preventDefault();
       }
     },
     true,
@@ -26,6 +27,7 @@
     (e) => {
       if (e.type == "command" && e.isTrusted) {
         e.stopImmediatePropagation();
+        e.preventDefault();
       }
     },
     true,
