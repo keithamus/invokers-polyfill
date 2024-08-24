@@ -1,3 +1,5 @@
+export {};
+
 interface InvokerMixin {
   commandForElement: HTMLElement | null;
   command: string;
