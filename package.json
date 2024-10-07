@@ -9,7 +9,7 @@
   "types": "invoker.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/keithamus/invokers-polyfill"
+    "url": "git+https://github.com/keithamus/invokers-polyfill.git"
   },
   "files": [
     "invoker.d.ts",
