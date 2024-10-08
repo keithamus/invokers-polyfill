@@ -109,7 +109,7 @@
   class InvokeEvent extends Event {
     constructor() {
       throw new Error(
-        "InvokeEvent has been deprecated, it has been renamed to `ComamndEvent`",
+        "InvokeEvent has been deprecated, it has been renamed to `CommandEvent`",
       );
     }
   }
