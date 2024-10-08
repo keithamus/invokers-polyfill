@@ -241,7 +241,7 @@
     if (event.defaultPrevented) return;
     if (event.type !== "click") return;
     const oldInvoker = event.target.closest(
-      "button[invoketarget], button[invokeaction], input[invoketarget], input[invokeaction]",
+      ":is(button, input):is([invoketarget], [invokeaction])",
     );
     if (oldInvoker) {
       console.warn(
@@ -250,7 +250,7 @@
     }
 
     const source = event.target.closest(
-      "button[commandfor], button[command], input[commandfor], input[command]",
+      ":is(button, input):is([commandfor], [command])",
     );
     if (!source) return;
 
