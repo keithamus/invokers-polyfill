@@ -197,7 +197,16 @@
         configurable: true,
         get() {
           const value = this.getAttribute("command") || "";
-          if (value) return value;
+          if (value.startsWith("--")) return value;
+          const valueLower = value.toLowerCase();
+          switch (valueLower) {
+            case "show-modal":
+            case "close":
+            case "toggle-popover":
+            case "hide-popover":
+            case "show-popover":
+              return valueLower;
+          }
           return "";
         },
         set(value) {
