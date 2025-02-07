@@ -247,11 +247,12 @@
       console.warn(
         "Elements with `invoketarget` or `invokeaction` are deprecated and should be renamed to use `commandfor` and `command` respectively",
       );
+      if (oldInvoker.matches("input")) {
+        throw new Error("Input elements no longer support `commandfor`");
+      }
     }
 
-    const source = event.target.closest(
-      "button[commandfor], button[command], input[commandfor], input[command]",
-    );
+    const source = event.target.closest("button[commandfor], button[command]");
     if (!source) return;
 
     if (this.form && this.getAttribute("type") !== "button") {
