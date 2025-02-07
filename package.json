@@ -18,7 +18,7 @@
   "scripts": {
     "prepublishOnly": "npm run minify",
     "minify": "esbuild --minify invoker.js > invoker.min.js",
-    "test": "echo TODO! Run ./wpt serve --inject-script=../invoker-buttons/invoker.js for now."
+    "test": "echo TODO! Run ./wpt serve --inject-script=../invokers-polyfill/invoker.js for now."
   },
   "devDependencies": {
     "esbuild": "^0.20.0"
