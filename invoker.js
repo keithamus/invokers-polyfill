@@ -296,6 +296,7 @@
     }
 
     const invokee = source.commandForElement;
+    if (!invokee) return;
     const invokeEvent = new CommandEvent("command", {
       command: source.command,
       source,
