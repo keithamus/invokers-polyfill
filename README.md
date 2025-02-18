@@ -28,3 +28,8 @@ With the module imported, you can add `commandfor` and `command` attributes to y
 <button commandfor="my-dialog" command="show-modal">Open Dialog!</button>
 <dialog id="my-dialog">I'm a dialog!</dialog>
 ```
+
+## Limitations
+
+This polyfill does not handle the aria (e.g. `aria-expanded`) of the command button the way browsers do.
+You are *strongly* encouraged to handle this state yourself, to ensure your site is accessible.
