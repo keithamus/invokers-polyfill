@@ -313,7 +313,7 @@
       const shouldHide = !canShow && command === "hide-popover";
 
       if (shouldShow) {
-        invokee.showPopover({ source: source });
+        invokee.showPopover({ source });
       } else if (shouldHide) {
         invokee.hidePopover();
       }
