@@ -24,8 +24,8 @@
     "url": "git+https://github.com/keithamus/invokers-polyfill.git"
   },
   "files": [
-    "invoker.d.ts",
-    "invoker.min.js"
+    "*.d.ts",
+    "*.js"
   ],
   "scripts": {
     "prepublishOnly": "npm run minify",
