@@ -4,7 +4,9 @@ This polyfills the HTML `commandfor`/`command` attributes, as proposed by the Op
 
 To see the explainer of these, please visit https://open-ui.org/components/invokers.explainer/.
 
-## How to use
+## Installation
+
+### With npm
 
 If you're using npm, you only need to import the package, like so:
 
@@ -12,15 +14,44 @@ If you're using npm, you only need to import the package, like so:
 import "invokers-polyfill";
 ```
 
+This will automatically apply the polyfill if required.
+
+If you'd like to manually apply the polyfill, you can instead import the `isSupported` and `apply` functions directly from the `./invoker.js` file, which
+is mapped to `/fn`:
+
+```js
+import { isSupported, apply } from "invokers-polyfill/fn";
+if (!isSupported()) apply();
+```
+
+An `isPolyfilled` function is also available, to detect if it has been polyfilled:
+
+```js
+import { isSupported, isPolyfilled, apply } from "invokers-polyfill/fn";
+if (!isSupported() && !isPolyfilled()) apply();
+```
+
 Alternatively, if you're not using a package manager, you can use the `unpkg` script:
 
 ```html
+<!-- polyfill automatically -->
 <script
   type="module"
   async
   src="https://unpkg.com/invokers-polyfill@latest/invoker.min.js"
 ></script>
 ```
+
+```html
+<!-- polyfill manually -->
+<script type="module" async>
+  import {isSupported, apply} from "https://unpkg.com/invokers-polyfill@latest/invoker.js"
+  if (!isSupported()) apply();
+  >
+</script>
+```
+
+## Usage
 
 With the module imported, you can add `commandfor` and `command` attributes to your HTML:
 
@@ -31,5 +62,4 @@ With the module imported, you can add `commandfor` and `command` attributes to y
 
 ## Limitations
 
-This polyfill does not handle the aria (e.g. `aria-expanded`) of the command button the way browsers do.
-You are *strongly* encouraged to handle this state yourself, to ensure your site is accessible.
+This polyfill does not handle the aria (e.g. `aria-expanded`) of the command button the way browsers do. You are _strongly_ encouraged to handle this state yourself, to ensure your site is accessible.

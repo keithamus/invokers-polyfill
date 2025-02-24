@@ -5,8 +5,20 @@
   "license": "MIT",
   "author": "Keith Cirkel (https://keithcirkel.co.uk)",
   "type": "module",
-  "main": "invoker.js",
+  "main": "index.js",
   "types": "invoker.d.ts",
+  "exports": {
+    ".": {
+      "types": "./invoker.d.ts",
+      "import": "./index.js",
+      "browser": "./invoker.min.js",
+      "require": "./invoker.min.js"
+    },
+    "./fn": {
+      "types": "./index-fn.d.ts",
+      "import": "./invoker.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keithamus/invokers-polyfill.git"
@@ -17,7 +29,7 @@
   ],
   "scripts": {
     "prepublishOnly": "npm run minify",
-    "minify": "esbuild --minify invoker.js > invoker.min.js",
+    "minify": "esbuild --bundle --minify index.js > invoker.min.js",
     "test": "echo TODO! Run ./wpt serve --inject-script=../invokers-polyfill/invoker.js for now."
   },
   "devDependencies": {

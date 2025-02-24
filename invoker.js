@@ -1,11 +1,18 @@
-(() => {
-  if (
-    typeof HTMLButtonElement === "undefined" ||
+/*#__PURE__*/
+export function isSupported() {
+  return (
+    typeof HTMLButtonElement !== "undefined" &&
+    "command" in HTMLButtonElement.prototype &&
     "source" in ((globalThis.CommandEvent || {}).prototype || {})
-  ) {
-    return;
-  }
+  );
+}
 
+/*#__PURE__*/
+export function isPolyfilled() {
+  return !/native code/i.test((globalThis.CommandEvent || {}).toString());
+}
+
+export function apply() {
   // XXX: Invoker Buttons used to dispatch 'invoke' events instead of
   // 'command' events. We should ensure to prevent 'invoke' events being
   // fired in those browsers.
@@ -367,4 +374,4 @@
     configurable: true,
     writable: true,
   });
-})();
+}
