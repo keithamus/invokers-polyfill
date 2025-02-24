@@ -307,9 +307,11 @@ export function apply() {
     const invokeEvent = new CommandEvent("command", {
       command: source.command,
       source,
+      cancelable: true,
     });
     invokee.dispatchEvent(invokeEvent);
-    if (invokeEvent.defaultPrevented) return;
+    if (invokeEvent.defaultPrevented)
+      return;
 
     const command = invokeEvent.command.toLowerCase();
 
