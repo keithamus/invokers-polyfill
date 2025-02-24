@@ -253,6 +253,54 @@ export function apply() {
     });
   }
 
+  const onHandlers = new WeakMap();
+  Object.defineProperties(HTMLElement.prototype, {
+    oncommand: {
+      enumerable: true,
+      configurable: true,
+      get() {
+        oncommandObserver.takeRecords();
+        return onHandlers.get(this) || null;
+      },
+      set(handler) {
+        const existing = onHandlers.get(this) || null;
+        if (existing) {
+          this.removeEventListener("command", existing);
+        }
+        onHandlers.set(
+          this,
+          typeof handler === "object" || typeof handler === "function"
+            ? handler
+            : null,
+        );
+        if (typeof handler == "function") {
+          this.addEventListener("command", handler);
+        }
+      },
+    },
+  });
+  function applyOnCommandHandler(els) {
+    for (const el of els) {
+      el.oncommand = new Function("event", el.getAttribute("oncommand"));
+    }
+  }
+  const oncommandObserver = new MutationObserver((records) => {
+    for (const record of records) {
+      const { target } = record;
+      if (record.type === "childList") {
+        applyOnCommandHandler(target.querySelectorAll("[oncommand]"));
+      } else {
+        applyOnCommandHandler([target]);
+      }
+    }
+  });
+  oncommandObserver.observe(document, {
+    subtree: true,
+    childList: true,
+    attributeFilter: ["oncommand"],
+  });
+  applyOnCommandHandler(document.querySelectorAll("[oncommand]"));
+
   function handleInvokerActivation(event) {
     if (event.defaultPrevented) return;
     if (event.type !== "click") return;
@@ -362,6 +410,8 @@ export function apply() {
 
   observeShadowRoots(globalThis.HTMLElement || function () {}, (shadow) => {
     setupInvokeListeners(shadow);
+    oncommandObserver.observe(shadow, { attributeFilter: ["oncommand"] });
+    applyOnCommandHandler(shadow.querySelectorAll("[oncommand]"));
   });
 
   setupInvokeListeners(document);
