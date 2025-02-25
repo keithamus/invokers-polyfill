@@ -1,2 +1,3 @@
-import "./invoker.d.ts";
-export * from "./invoker.js";
+export declare function isSupported(): boolean;
+export declare function isPolyfilled(): boolean;
+export declare function apply(): void;

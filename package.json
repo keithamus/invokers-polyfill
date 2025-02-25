@@ -2,11 +2,13 @@
   "name": "invokers-polyfill",
   "version": "0.0.0-development",
   "description": "This polyfills the HTML `invoketarget`/`invokeaction`, as proposed by the Open UI group.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keithamus/invokers-polyfill.git"
+  },
   "license": "MIT",
   "author": "Keith Cirkel (https://keithcirkel.co.uk)",
   "type": "module",
-  "main": "index.js",
-  "types": "invoker.d.ts",
   "exports": {
     ".": {
       "types": "./invoker.d.ts",
@@ -19,17 +21,22 @@
       "import": "./invoker.js"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/keithamus/invokers-polyfill.git"
+  "main": "index.js",
+  "types": "invoker.d.ts",
+  "typesVersions": {
+    "*": {
+      "fn": [
+        "./index-fn.d.ts"
+      ]
+    }
   },
   "files": [
     "*.d.ts",
     "*.js"
   ],
   "scripts": {
-    "prepublishOnly": "npm run minify",
     "minify": "esbuild --bundle --minify index.js > invoker.min.js",
+    "prepublishOnly": "npm run minify",
     "test": "echo TODO! Run ./wpt serve --inject-script=../invokers-polyfill/invoker.js for now."
   },
   "devDependencies": {
