@@ -7,7 +7,7 @@ declare global {
   }
   interface HTMLButtonElement {
     commandForElement: HTMLElement | null;
-    command: 'show-modal' | 'close' | 'hide-popover' | 'toggle-popover' | 'show-popover' | `--${string}`;
+    command: '' | 'show-modal' | 'close' | 'hide-popover' | 'toggle-popover' | 'show-popover' | `--${string}`;
   }
   interface Window {
     CommandEvent: CommandEvent;
