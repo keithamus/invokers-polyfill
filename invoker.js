@@ -55,8 +55,6 @@ export function apply() {
     return node;
   }
 
-  const ShadowRoot = globalThis.ShadowRoot || function () {};
-
   const commandEventSourceElements = new WeakMap();
   const commandEventActions = new WeakMap();
 
@@ -406,9 +404,9 @@ export function apply() {
     };
   }
 
-  applyInvokerMixin(globalThis.HTMLButtonElement || function () {});
+  applyInvokerMixin(HTMLButtonElement);
 
-  observeShadowRoots(globalThis.HTMLElement || function () {}, (shadow) => {
+  observeShadowRoots(HTMLElement, (shadow) => {
     setupInvokeListeners(shadow);
     oncommandObserver.observe(shadow, { attributeFilter: ["oncommand"] });
     applyOnCommandHandler(shadow.querySelectorAll("[oncommand]"));
