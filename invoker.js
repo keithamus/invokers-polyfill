@@ -321,12 +321,11 @@ export function apply() {
 
     if (source.form && source.getAttribute("type") !== "button") {
       event.preventDefault();
-
-       throw new Error(
-         "Element with `commandFor` is a form participant. " +
-           "It should explicitly set `type=button` in order for `commandFor` to work. " +
-           "In order for it to act as a Submit button, it must not have command or commandfor attributes",
-       );
+      throw new Error(
+        "Element with `commandFor` is a form participant. " +
+          "It should explicitly set `type=button` in order for `commandFor` to work. " +
+          "In order for it to act as a Submit button, it must not have command or commandfor attributes",
+      );
     }
 
     if (source.hasAttribute("command") !== source.hasAttribute("commandfor")) {
