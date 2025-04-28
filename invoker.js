@@ -414,14 +414,5 @@ export function apply() {
 
   setupInvokeListeners(document);
 
-  Object.defineProperty(window, "CommandEvent", {
-    value: CommandEvent,
-    configurable: true,
-    writable: true,
-  });
-  Object.defineProperty(window, "InvokeEvent", {
-    value: InvokeEvent,
-    configurable: true,
-    writable: true,
-  });
+  Object.assign(globalThis, { CommandEvent, InvokeEvent });
 }
