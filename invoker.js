@@ -317,7 +317,7 @@ export function apply() {
     const source = event.target.closest("button[commandfor], button[command]");
     if (!source) return;
 
-    if (this.form && this.getAttribute("type") !== "button") {
+    if (source.form && source.getAttribute("type") !== "button") {
       event.preventDefault();
       throw new Error(
         "Element with `commandFor` is a form participant. " +
