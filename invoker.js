@@ -299,7 +299,7 @@ export function apply() {
   });
   applyOnCommandHandler(document.querySelectorAll("[oncommand]"));
 
-  function handleInvokerActivation(event) {
+  function handleInvokerActivation(event, state) {
     if (event.defaultPrevented) return;
     if (event.type !== "click") return;
     const oldInvoker = event.target.closest(
@@ -362,13 +362,28 @@ export function apply() {
     const command = invokeEvent.command.toLowerCase();
 
     if (invokee.popover) {
-      const canShow = !invokee.matches(":popover-open");
+      const canShow =
+        !invokee.matches(":popover-open") &&
+        (!state.popoverOpen || command !== "toggle-popover");
       const shouldShow =
         canShow && (command === "toggle-popover" || command === "show-popover");
       const shouldHide = !canShow && command === "hide-popover";
 
       if (shouldShow) {
         invokee.showPopover({ source });
+        // Clicking on the toggle triggers auto-dismiss for the popover, so we need to keep track of the popover state to avoid showing it right back again.
+        state.popoverOpen = true;
+        const unsubscribe = new AbortController();
+        invokee.addEventListener(
+          "toggle",
+          (e) => {
+            if (e.newState === "closed") {
+              state.popoverOpen = false;
+              unsubscribe.abort();
+            }
+          },
+          { signal: unsubscribe.signal },
+        );
       } else if (shouldHide) {
         invokee.hidePopover();
       }
@@ -386,7 +401,12 @@ export function apply() {
   }
 
   function setupInvokeListeners(target) {
-    target.addEventListener("click", handleInvokerActivation, true);
+    const state = {};
+    target.addEventListener(
+      "click",
+      (e) => handleInvokerActivation(e, state),
+      true,
+    );
   }
 
   function observeShadowRoots(ElementClass, callback) {
