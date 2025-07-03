@@ -381,9 +381,10 @@ export function apply() {
       if (canShow && command == "show-modal") {
         invokee.showModal();
       } else if (!canShow && command == "close") {
-        invokee.close(source.value);
+        invokee.close(source.value ? source.value : undefined);
       } else if (!canShow && command == "request-close") {
-        invokee.requestClose(source.value);
+        invokee.requestClose(source.value ? source.value : undefined);
+        
       }
     }
   }
