@@ -207,6 +207,7 @@ export function apply() {
           const valueLower = value.toLowerCase();
           switch (valueLower) {
             case "show-modal":
+            case "request-close":
             case "close":
             case "toggle-popover":
             case "hide-popover":
@@ -340,6 +341,7 @@ export function apply() {
       source.command !== "hide-popover" &&
       source.command !== "toggle-popover" &&
       source.command !== "show-modal" &&
+      source.command !== "request-close" &&
       source.command !== "close" &&
       !source.command.startsWith("--")
     ) {
@@ -375,13 +377,15 @@ export function apply() {
       }
     } else if (invokee.localName === "dialog") {
       const canShow = !invokee.hasAttribute("open");
-      const shouldShow = canShow && command === "show-modal";
-      const shouldHide = !canShow && command === "close";
+      const shouldHide = !canShow && (command === "close" || command == "request-close");
 
-      if (shouldShow) {
+      if (canShow && command == "show-modal") {
         invokee.showModal();
-      } else if (shouldHide) {
-        invokee.close();
+      } else if (!canShow && command == "close") {
+        invokee.close(source.value ? source.value : undefined);
+      } else if (!canShow && command == "request-close") {
+        invokee.requestClose(source.value ? source.value : undefined);
+        
       }
     }
   }
