@@ -112,7 +112,8 @@ export function apply() {
   enumerate(CommandEvent.prototype, "command");
 
   class InvokeEvent extends Event {
-    constructor() {
+    constructor(type, invokeEventInit = {}) {
+      super(type, invokeEventInit);
       throw new Error(
         "InvokeEvent has been deprecated, it has been renamed to `CommandEvent`",
       );
