@@ -1,4 +1,3 @@
-/*#__PURE__*/
 export function isSupported() {
   return (
     typeof HTMLButtonElement !== "undefined" &&
@@ -7,7 +6,6 @@ export function isSupported() {
   );
 }
 
-/*#__PURE__*/
 export function isPolyfilled() {
   return !/native code/i.test((globalThis.CommandEvent || {}).toString());
 }
