@@ -355,6 +355,7 @@ export function apply() {
       cancelable: true,
     });
     invokee.dispatchEvent(invokeEvent);
+    event.stopPropagation();
     if (invokeEvent.defaultPrevented)
       return;
 
