@@ -376,15 +376,25 @@ export function apply() {
       }
     } else if (invokee.localName === "dialog") {
       const canShow = !invokee.hasAttribute("open");
-      const shouldHide = !canShow && (command === "close" || command == "request-close");
 
       if (canShow && command == "show-modal") {
         invokee.showModal();
       } else if (!canShow && command == "close") {
         invokee.close(source.value ? source.value : undefined);
       } else if (!canShow && command == "request-close") {
+        // requestClose is only supported from Safari 18.4, so we polyfill it on older browsers
+        if (!HTMLDialogElement.prototype.requestClose) {
+          HTMLDialogElement.prototype.requestClose = function() {
+            const cancelEvent = new Event('cancel', { cancelable: true });
+            this.dispatchEvent(cancelEvent);
+
+            if (!cancelEvent.defaultPrevented) {
+              this.close();
+            }
+          };
+        }
+
         invokee.requestClose(source.value ? source.value : undefined);
-        
       }
     }
   }
