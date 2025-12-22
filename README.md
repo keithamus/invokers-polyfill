@@ -60,6 +60,15 @@ With the module imported, you can add `commandfor` and `command` attributes to y
 <dialog id="my-dialog">I'm a dialog!</dialog>
 ```
 
+## Supported commands
+
+The following built-in commands (aligned with current spec) are supported:
+
+* `toggle-popover`/`open-popover`/`close-popover`
+* `show-modal`: open a `<dialog>` element in modal mode
+* `close`: close a `<dialog>` open (either in modal or non-modal mode)
+* `request-close`: close a `<dialog>` but emit a `cancel` event first, allowing a user to eventually prevent it. `requestClose` is only available from Safari 18.4, the `requestClose` will be polyfilled on older browsers.
+
 ## Limitations
 
 This polyfill does not handle the aria (e.g. `aria-expanded`) of the command button the way browsers do. You are _strongly_ encouraged to handle this state yourself, to ensure your site is accessible.

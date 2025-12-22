@@ -205,6 +205,7 @@ export function apply() {
           const valueLower = value.toLowerCase();
           switch (valueLower) {
             case "show-modal":
+            case "request-close":
             case "close":
             case "toggle-popover":
             case "hide-popover":
@@ -338,6 +339,7 @@ export function apply() {
       source.command !== "hide-popover" &&
       source.command !== "toggle-popover" &&
       source.command !== "show-modal" &&
+      source.command !== "request-close" &&
       source.command !== "close" &&
       !source.command.startsWith("--")
     ) {
@@ -373,13 +375,25 @@ export function apply() {
       }
     } else if (invokee.localName === "dialog") {
       const canShow = !invokee.hasAttribute("open");
-      const shouldShow = canShow && command === "show-modal";
-      const shouldHide = !canShow && command === "close";
 
-      if (shouldShow) {
+      if (canShow && command == "show-modal") {
         invokee.showModal();
-      } else if (shouldHide) {
-        invokee.close();
+      } else if (!canShow && command == "close") {
+        invokee.close(source.value ? source.value : undefined);
+      } else if (!canShow && command == "request-close") {
+        // requestClose is only supported from Safari 18.4, so we polyfill it on older browsers
+        if (!HTMLDialogElement.prototype.requestClose) {
+          HTMLDialogElement.prototype.requestClose = function() {
+            const cancelEvent = new Event('cancel', { cancelable: true });
+            this.dispatchEvent(cancelEvent);
+
+            if (!cancelEvent.defaultPrevented) {
+              this.close();
+            }
+          };
+        }
+
+        invokee.requestClose(source.value ? source.value : undefined);
       }
     }
   }
