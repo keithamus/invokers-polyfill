@@ -355,7 +355,6 @@ export function apply() {
       cancelable: true,
     });
     invokee.dispatchEvent(invokeEvent);
-    event.stopPropagation();
     if (invokeEvent.defaultPrevented)
       return;
 
@@ -407,7 +406,8 @@ export function apply() {
   applyInvokerMixin(HTMLButtonElement);
 
   observeShadowRoots(HTMLElement, (shadow) => {
-    setupInvokeListeners(shadow);
+    // Make sure to not re-attach listeners here, because click events are composable and already pierce
+    // the shadow dom, so the click listener on the document is enough
     oncommandObserver.observe(shadow, { attributeFilter: ["oncommand"] });
     applyOnCommandHandler(shadow.querySelectorAll("[oncommand]"));
   });
