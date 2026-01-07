@@ -299,7 +299,13 @@ export function apply() {
   });
   applyOnCommandHandler(document.querySelectorAll("[oncommand]"));
 
+  const processedEvents = new WeakSet();
+
   function handleInvokerActivation(event) {
+    if (processedEvents.has(event)) return;
+    
+    processedEvents.add(event);
+
     if (event.defaultPrevented) return;
     if (event.type !== "click") return;
     const oldInvoker = event.target.closest(
