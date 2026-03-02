@@ -126,15 +126,7 @@ export function apply() {
         enumerable: true,
         configurable: true,
         set(targetElement) {
-          if (this.hasAttribute("invokeaction")) {
-            throw new TypeError(
-              "Element has deprecated `invokeaction` attribute, replace with `command`",
-            );
-          } else if (this.hasAttribute("invoketarget")) {
-            throw new TypeError(
-              "Element has deprecated `invoketarget` attribute, replace with `commandfor`",
-            );
-          } else if (targetElement === null) {
+          if (targetElement === null) {
             this.removeAttribute("commandfor");
             invokerAssociatedElements.delete(this);
           } else if (!(targetElement instanceof Element)) {
@@ -155,15 +147,6 @@ export function apply() {
         },
         get() {
           if (this.localName !== "button") {
-            return null;
-          }
-          if (
-            this.hasAttribute("invokeaction") ||
-            this.hasAttribute("invoketarget")
-          ) {
-            console.warn(
-              "Element has deprecated `invoketarget` or `invokeaction` attribute, use `commandfor` and `command` instead",
-            );
             return null;
           }
           if (this.disabled) {
@@ -216,36 +199,6 @@ export function apply() {
         },
         set(value) {
           this.setAttribute("command", value);
-        },
-      },
-
-      invokeAction: {
-        enumerable: false,
-        configurable: true,
-        get() {
-          throw new Error(
-            `invokeAction is deprecated. It has been renamed to command`,
-          );
-        },
-        set(value) {
-          throw new Error(
-            `invokeAction is deprecated. It has been renamed to command`,
-          );
-        },
-      },
-
-      invokeTargetElement: {
-        enumerable: false,
-        configurable: true,
-        get() {
-          throw new Error(
-            `invokeTargetElement is deprecated. It has been renamed to command`,
-          );
-        },
-        set(value) {
-          throw new Error(
-            `invokeTargetElement is deprecated. It has been renamed to command`,
-          );
         },
       },
     });
@@ -308,18 +261,6 @@ export function apply() {
 
     if (event.defaultPrevented) return;
     if (event.type !== "click") return;
-    const oldInvoker = event.target.closest(
-      "button[invoketarget], button[invokeaction], input[invoketarget], input[invokeaction]",
-    );
-    if (oldInvoker) {
-      console.warn(
-        "Elements with `invoketarget` or `invokeaction` are deprecated and should be renamed to use `commandfor` and `command` respectively",
-      );
-      if (oldInvoker.matches("input")) {
-        throw new Error("Input elements no longer support `commandfor`");
-      }
-    }
-
     const source = event.target.closest("button[commandfor], button[command]");
     if (!source) return;
 
