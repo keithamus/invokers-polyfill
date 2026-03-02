@@ -7,7 +7,10 @@
     async
     src="https://unpkg.com/@oddbird/popover-polyfill@0.5.2/dist/popover.js"
   ></script>
-  <script type="module" src="./index.js"></script>
+  <script type="module">
+    import {apply} from "./invoker.js";
+    apply();
+  </script>
   <body>
     <h1>commandfor &amp; command attributes</h1>
     <p>
