@@ -93,30 +93,9 @@ export function apply() {
       }
       return commandEventActions.get(this);
     }
-
-    get action() {
-      throw new Error(
-        "CommandEvent#action was renamed to CommandEvent#command",
-      );
-    }
-
-    get invoker() {
-      throw new Error(
-        "CommandEvent#invoker was renamed to CommandEvent#source",
-      );
-    }
   }
   enumerate(CommandEvent.prototype, "source");
   enumerate(CommandEvent.prototype, "command");
-
-  class InvokeEvent extends Event {
-    constructor(type, invokeEventInit = {}) {
-      super(type, invokeEventInit);
-      throw new Error(
-        "InvokeEvent has been deprecated, it has been renamed to `CommandEvent`",
-      );
-    }
-  }
 
   const invokerAssociatedElements = new WeakMap();
 
