@@ -1,8 +1,9 @@
 # Invoker Buttons Polyfill
 
-This polyfills the HTML `commandfor`/`command` attributes, as proposed by the Open UI group.
+This polyfills the HTML [`commandfor`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/commandForElement)/[`command`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/command) attributes, as proposed by the Open UI group.
 
-To see the explainer of these, please visit https://open-ui.org/components/invokers.explainer/.
+To see the explainer of these, please visit https://open-ui.org/components/invokers.explainer/,
+and have a look at the [MDN Invoker Commands API Docs](https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API).
 
 ## Installation
 
