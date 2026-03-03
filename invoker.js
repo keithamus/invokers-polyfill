@@ -235,7 +235,7 @@ export function apply() {
 
   function handleInvokerActivation(event) {
     if (processedEvents.has(event)) return;
-    
+
     processedEvents.add(event);
 
     if (event.defaultPrevented) return;
@@ -283,8 +283,7 @@ export function apply() {
       cancelable: true,
     });
     invokee.dispatchEvent(invokeEvent);
-    if (invokeEvent.defaultPrevented)
-      return;
+    if (invokeEvent.defaultPrevented) return;
 
     const command = invokeEvent.command.toLowerCase();
 
@@ -309,8 +308,8 @@ export function apply() {
       } else if (!canShow && command == "request-close") {
         // requestClose is only supported from Safari 18.4, so we polyfill it on older browsers
         if (!HTMLDialogElement.prototype.requestClose) {
-          HTMLDialogElement.prototype.requestClose = function() {
-            const cancelEvent = new Event('cancel', { cancelable: true });
+          HTMLDialogElement.prototype.requestClose = function () {
+            const cancelEvent = new Event("cancel", { cancelable: true });
             this.dispatchEvent(cancelEvent);
 
             if (!cancelEvent.defaultPrevented) {
