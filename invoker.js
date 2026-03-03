@@ -352,5 +352,5 @@ export function apply() {
 
   setupInvokeListeners(document);
 
-  Object.assign(globalThis, { CommandEvent, InvokeEvent });
+  Object.assign(globalThis, { CommandEvent });
 }
