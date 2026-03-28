@@ -240,7 +240,9 @@ export function apply() {
 
     if (event.defaultPrevented) return;
     if (event.type !== "click") return;
-    const source = event.target.closest("button[commandfor], button[command]");
+    const source = event.target.shadowRoot
+      ? event.composedPath().find((el) => el.matches("button[commandfor], button[command]"))
+      : event.target.closest("button[commandfor], button[command]");
     if (!source) return;
 
     if (source.form && source.getAttribute("type") !== "button") {
