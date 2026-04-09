@@ -11,22 +11,6 @@ export function isPolyfilled() {
 }
 
 export function apply() {
-  // XXX: Invoker Buttons used to dispatch 'invoke' events instead of
-  // 'command' events. We should ensure to prevent 'invoke' events being
-  // fired in those browsers.
-  // XXX: https://bugs.chromium.org/p/chromium/issues/detail?id=1523183
-  // Chrome will dispatch invoke events even with the flag disabled; so
-  // we need to capture those to prevent duplicate events.
-  document.addEventListener(
-    "invoke",
-    (e) => {
-      if (e.type == "invoke" && e.isTrusted) {
-        e.stopImmediatePropagation();
-        e.preventDefault();
-      }
-    },
-    true,
-  );
   document.addEventListener(
     "command",
     (e) => {
