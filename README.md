@@ -48,7 +48,6 @@ Alternatively, if you're not using a package manager, you can use the `unpkg` sc
 <script type="module" async>
   import {isSupported, apply} from "https://unpkg.com/invokers-polyfill@latest/invoker.js"
   if (!isSupported()) apply();
-  >
 </script>
 ```
 
