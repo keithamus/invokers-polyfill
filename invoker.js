@@ -291,7 +291,9 @@ export function apply() {
       const canShow = !invokee.matches(":popover-open");
       const shouldShow =
         canShow && (command === "toggle-popover" || command === "show-popover");
-      const shouldHide = !canShow && command === "hide-popover";
+      const shouldHide =
+        !canShow &&
+        (command === "toggle-popover" || command === "hide-popover");
 
       if (shouldShow) {
         invokee.showPopover({ source });
