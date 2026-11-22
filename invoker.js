@@ -321,18 +321,24 @@ export function apply() {
       return shadow;
     };
     const attachInternals = ElementClass.prototype.attachInternals;
-    ElementClass.prototype.attachInternals = function () {
-      const internals = attachInternals.call(this);
-      if (internals.shadowRoot) callback(internals.shadowRoot);
-      return internals;
-    };
+    if (typeof attachInternals === "function") {
+      ElementClass.prototype.attachInternals = function () {
+        const internals = attachInternals.call(this);
+        if (internals.shadowRoot) callback(internals.shadowRoot);
+        return internals;
+      };
+    }
   }
 
   applyInvokerMixin(HTMLButtonElement);
 
   observeShadowRoots(HTMLElement, (shadow) => {
     setupInvokeListeners(shadow);
-    oncommandObserver.observe(shadow, { attributeFilter: ["oncommand"] });
+    oncommandObserver.observe(shadow, {
+      subtree: true,
+      childList: true,
+      attributeFilter: ["oncommand"],
+    });
     applyOnCommandHandler(shadow.querySelectorAll("[oncommand]"));
   });
 
